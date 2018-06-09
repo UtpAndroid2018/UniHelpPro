@@ -342,18 +342,24 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
 
         }
 
-        SharedPrefsUtils sharedPrefsUtils =  SharedPrefsUtils.getInstance() ;
-        sharedPrefsUtils.setStringPreference( Constants.ARG_GIVEN_NAME, name );
-        sharedPrefsUtils.setStringPreference(Constants.ARG_DISPLAY_ID, preferredUsername);
+        String domain = preferredUsername;
+        int index = domain.indexOf('@');
+        domain = domain.substring(index+1);
 
-        Connect.getInstance().setUserOutlook( mAuthResult.getUser() );
+        if( domain.equals("utp.edu.pe") ) {
+            SharedPrefsUtils sharedPrefsUtils =  SharedPrefsUtils.getInstance() ;
+            sharedPrefsUtils.setStringPreference( Constants.ARG_GIVEN_NAME, name );
+            sharedPrefsUtils.setStringPreference(Constants.ARG_DISPLAY_ID, preferredUsername);
 
-        if ( UserUtils.isValidLogin( mContext ) ) {
-            BackendlessUser user = Backendless.UserService.CurrentUser();
-            if( user != null ){
-                Connect.getInstance().setUserBackendless( user );
-                gotoMain();
-            }
+            Connect.getInstance().setUserOutlook( mAuthResult.getUser() );
+
+
+            if ( UserUtils.isValidLogin( mContext ) ) {
+                BackendlessUser user = Backendless.UserService.CurrentUser();
+                if( user != null ){
+                    Connect.getInstance().setUserBackendless( user );
+                    gotoMain();
+                }
             /*
             String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
             Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser> ( ) {
@@ -369,26 +375,29 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
                 }
             } );
             */
-        } else {
-            UserUtils.login( preferredUsername, preferredUsername, new AsyncCallback<BackendlessUser> () {
-                @Override
-                public void handleResponse(BackendlessUser user) {
-                    Connect.getInstance().setUserBackendless( user );
-                    gotoMain();
-                }
-                @Override
-                public void handleFault(BackendlessFault fault) {
-                    Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }  );
-        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                resetUIForConnect();
+            } else {
+                UserUtils.login( preferredUsername, preferredUsername, new AsyncCallback<BackendlessUser> () {
+                    @Override
+                    public void handleResponse(BackendlessUser user) {
+                        Connect.getInstance().setUserBackendless( user );
+                        gotoMain();
+                    }
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }  );
             }
-        });
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    resetUIForConnect();
+                }
+            });
+        }  else {
+            UserUtils.logout();
+        }
     }
 
     @Override

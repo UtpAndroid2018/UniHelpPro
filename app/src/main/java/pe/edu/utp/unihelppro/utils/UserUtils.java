@@ -11,6 +11,7 @@ import com.backendless.exceptions.BackendlessFault;
 
 import pe.edu.utp.unihelppro.Defaults;
 import pe.edu.utp.unihelppro.authentication.AuthenticationManager;
+import pe.edu.utp.unihelppro.authentication.Constants;
 
 public class UserUtils {
     public static boolean isValidLogin(final Context mContext ) {
@@ -79,6 +80,10 @@ public class UserUtils {
             mgr.disconnect();
             Backendless.UserService.logout();
             Backendless.Messaging.unregisterDevice();
+            SharedPrefsUtils sharedPrefsUtils =  SharedPrefsUtils.getInstance() ;
+            sharedPrefsUtils.setStringPreference( Constants.ARG_GIVEN_NAME, "" );
+            sharedPrefsUtils.setStringPreference(Constants.ARG_DISPLAY_ID, "");
+
         }
         catch( BackendlessException exception ) {
             //Toast.makeText(mContext, exception.getMessage(), Toast.LENGTH_SHORT).show();
