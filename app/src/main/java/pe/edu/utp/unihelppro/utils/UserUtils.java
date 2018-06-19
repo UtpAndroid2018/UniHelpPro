@@ -83,7 +83,6 @@ public class UserUtils {
             SharedPrefsUtils sharedPrefsUtils =  SharedPrefsUtils.getInstance() ;
             sharedPrefsUtils.setStringPreference( Constants.ARG_GIVEN_NAME, "" );
             sharedPrefsUtils.setStringPreference(Constants.ARG_DISPLAY_ID, "");
-
         }
         catch( BackendlessException exception ) {
             //Toast.makeText(mContext, exception.getMessage(), Toast.LENGTH_SHORT).show();
