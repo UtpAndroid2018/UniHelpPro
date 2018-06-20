@@ -3,16 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CalificarIncidente" android:orientation="vertical">
-
-    <!-- TODO: Update blank fragment layout -->
-
+    tools:context=".fragments.CalificarIncidente" android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Calificar Incidente"
+        android:text="@string/calificar_incidente"
         android:textStyle="bold"
         tools:textSize="24sp" />
 
@@ -29,7 +26,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Seleccione una puntuacion:" />
+            android:text="@string/seleccione_una_puntuacion" />
 
         <RatingBar
             android:id="@+id/rbPuntuacion"
@@ -47,7 +44,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Dejanos un comentario:" />
+            android:text="@string/dejanos_un_comentario" />
 
         <EditText
             android:id="@+id/addr_edittext"
@@ -66,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Enviar" />
+            android:text="@string/enviar" />
     </LinearLayout>
 
 </LinearLayout>

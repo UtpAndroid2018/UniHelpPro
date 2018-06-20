@@ -21,9 +21,12 @@ import android.widget.Toast;
 
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.Connect;
+import pe.edu.utp.unihelppro.fragments.AsignarIncidente;
+import pe.edu.utp.unihelppro.fragments.CalificarIncidente;
 import pe.edu.utp.unihelppro.fragments.CommentFragment;
 import pe.edu.utp.unihelppro.fragments.CrearSolicitudFragment;
 import pe.edu.utp.unihelppro.fragments.IncidentesFragment;
+import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
 import pe.edu.utp.unihelppro.utils.Navigation;
 import pe.edu.utp.unihelppro.utils.UserUtils;
 
@@ -192,6 +195,20 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case android.R.id.home:
                 mDrawer.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_settings:
+                return true;
+            case R.id.action_calificar:
+                CalificarIncidente calificarIncidente = CalificarIncidente.newInstance("", "");
+                calificarIncidente.show( getSupportFragmentManager() , "dialog" );
+                return true;
+            case R.id.action_reportar:
+                ReportarIncidente reportarIncidente = ReportarIncidente.newInstance("", "");
+                reportarIncidente.show( getSupportFragmentManager() , "dialog" );
+                return true;
+            case R.id.action_asignar:
+                AsignarIncidente asignarIncidente = AsignarIncidente.newInstance("", "");
+                asignarIncidente.show( getSupportFragmentManager() , "dialog" );
                 return true;
         }
 

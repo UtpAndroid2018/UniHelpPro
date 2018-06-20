@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CalificarIncidente" android:orientation="vertical">
+    tools:context=".fragments.CalificarIncidente" android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -12,7 +12,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reportar Incidente"
+        android:text="@string/reportar_incidente"
         android:textStyle="bold"
         tools:textSize="24sp" />
 
@@ -30,7 +30,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Detalla el motivo:" />
+            android:text="@string/detalla_el_motivo" />
 
         <EditText
             android:id="@+id/addr_edittext"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Enviar" />
+            android:text="@string/enviar" />
 
         <Spinner
             android:id="@+id/spinner"

@@ -66,4 +66,13 @@
     <string name="registrar">Registrar</string>
     <string name="adjuntar_foto">Adjuntar Foto</string>
     <string name="imagen_no_disponible">Imagen no disponible</string>
+    <string name="asignar_incidente">Asignar Incidente</string>
+    <string name="seleccionar_categoria">Seleccionar categoria:</string>
+    <string name="seleccionar_encargado">Seleccionar Encargado:</string>
+    <string name="enviar">Enviar</string>
+    <string name="calificar_incidente">Calificar Incidente</string>
+    <string name="seleccione_una_puntuacion">Seleccione una puntuacion:</string>
+    <string name="dejanos_un_comentario">Dejanos un comentario:</string>
+    <string name="reportar_incidente">Reportar Incidente</string>
+    <string name="detalla_el_motivo">Detalla el motivo:</string>
 </resources>

@@ -3,6 +3,7 @@ package pe.edu.utp.unihelppro.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,7 @@ import pe.edu.utp.unihelppro.R;
  * Use the {@link CalificarIncidente#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CalificarIncidente extends Fragment {
+public class CalificarIncidente extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -81,8 +82,7 @@ public class CalificarIncidente extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            //throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 

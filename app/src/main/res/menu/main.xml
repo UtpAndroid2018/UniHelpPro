@@ -6,4 +6,19 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_reportar"
+        android:orderInCategory="100"
+        android:title="@string/reportar_incidente"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_calificar"
+        android:orderInCategory="100"
+        android:title="@string/calificar_incidente"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_asignar"
+        android:orderInCategory="100"
+        android:title="@string/asignar_incidente"
+        app:showAsAction="never" />
 </menu>
