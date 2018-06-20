@@ -102,16 +102,30 @@
                     android:id="@+id/btnFoto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+<<<<<<< HEAD
                     android:drawableStart="@drawable/ic_insert_photo_black_24dp"
                     android:text="@string/adjuntar_foto" />
+=======
+                    android:drawableLeft="@drawable/ic_insert_photo_black_24dp"
+                    android:text="Adjuntar Foto"
+                    />
+>>>>>>> 9927f3eac433fcf2c595add47be633f558432bd4
 
                 <ImageView
                     android:id="@+id/previewImageView"
                     android:layout_width="match_parent"
+<<<<<<< HEAD
                     android:layout_height="200sp"
                     android:contentDescription="@string/imagen_no_disponible"
                     android:src="@drawable/ic_photo_camera_black"
                     android:visibility="gone" />
+=======
+                    android:layout_height="200dp"
+
+                    android:src="@drawable/img_base"
+                    />
+
+>>>>>>> 9927f3eac433fcf2c595add47be633f558432bd4
 
             </LinearLayout>
 
@@ -125,8 +139,14 @@
                     android:id="@+id/btnAudio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+<<<<<<< HEAD
                     android:drawableStart="@drawable/ic_mic_black_24dp"
                     android:text="@string/adjuntar_audio" />
+=======
+                    android:drawableLeft="@drawable/ic_mic_black_24dp"
+                    android:text="Adjuntar audio"
+                   />
+>>>>>>> 9927f3eac433fcf2c595add47be633f558432bd4
             </LinearLayout>
 
             <LinearLayout
