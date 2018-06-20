@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,152 +9,194 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
         <LinearLayout
-            android:padding="@dimen/activity_horizontal_margin"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/sede"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Spinner
-                    android:spinnerMode="dropdown"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:id="@+id/inputSede"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
 
             <LinearLayout
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/pabell_n"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
 
-                <Spinner
-                    android:spinnerMode="dropdown"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:id="@+id/inputPabellon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
                 <TextView
-                    android:text="@string/aula"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Spinner
-                    android:spinnerMode="dropdown"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:id="@+id/inputAula"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/categor_a"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Spinner
-                    android:spinnerMode="dropdown"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:id="@+id/inputCategoria"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/adjuntar_foto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/adjuntar_audio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/descripci_n"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <EditText
-                    android:inputType="textMultiLine"
-                    android:lines="8"
-                    android:minLines="6"
-                    android:gravity="top|left"
-                    android:maxLines="10"
                     android:layout_height="wrap_content"
+                    android:text="@string/sede" />
+
+                <Spinner
+                    android:id="@+id/inputSede"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pabell_n" />
+
+                <Spinner
+                    android:id="@+id/inputPabellon"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/aula" />
+
+                <Spinner
+                    android:id="@+id/inputAula"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/categor_a" />
+
+                <Spinner
+                    android:id="@+id/inputCategoria"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_insert_photo_black_24dp"
+                    android:text="@string/adjuntar_foto" />
+
+                <ImageView
+                    android:id="@+id/previewImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200sp"
+                    android:contentDescription="@string/imagen_no_disponible"
+                    android:src="@drawable/ic_photo_camera_black"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnAudio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_mic_black_24dp"
+                    android:text="@string/adjuntar_audio" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/descripci_n" />
+
+                <EditText
+                    android:id="@+id/inputDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="50sp"
+                    android:gravity="top|left"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:maxLines="6"
+                    android:minLines="4"
                     android:scrollbars="vertical"
                     android:singleLine="false" />
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/p_blico"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                android:orientation="horizontal">
+                <Switch
+                    android:id="@+id/inputPublico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/p_blico" />
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/linearInputNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
+
                 <TextView
-                    android:text="@string/nombre_del_personal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/nombre_del_personal" />
+
+                <TextView
+                    android:id="@+id/inputNombre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <Button
-                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_gravity="center"
                     android:id="@+id/inputRegistrar"
-                    android:text="@string/registrar"
-                    android:drawableEnd="@drawable/ic_send_white"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_send_white"
+                    android:text="@string/registrar" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

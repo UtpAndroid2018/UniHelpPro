@@ -59,10 +59,11 @@
     <string name="pabell_n">Pabellón</string>
     <string name="aula">Aula</string>
     <string name="categor_a">Categoría</string>
-    <string name="adjuntar_foto">Adjuntar Foto</string>
     <string name="adjuntar_audio">Adjuntar Audio</string>
     <string name="descripci_n">Descripción</string>
     <string name="p_blico">Público</string>
     <string name="nombre_del_personal">Nombre del personal</string>
     <string name="registrar">Registrar</string>
+    <string name="adjuntar_foto">Adjuntar Foto</string>
+    <string name="imagen_no_disponible">Imagen no disponible</string>
 </resources>
