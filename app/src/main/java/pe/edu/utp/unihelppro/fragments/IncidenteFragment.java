@@ -10,8 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.adapters.IncidenteAdapter;
@@ -29,6 +34,7 @@ public class IncidenteFragment extends Fragment {
     private Context mContext;
 
     private OnFragmentInteractionListener mListener;
+    private RecyclerView incidentesRecycler;
 
     public IncidenteFragment() {
         
@@ -60,7 +66,7 @@ public class IncidenteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_incidente, container, false);
         mContext = getContext();
-        RecyclerView incidentesRecycler = (RecyclerView) view.findViewById(R.id.incidentesRecycler);
+        incidentesRecycler = (RecyclerView) view.findViewById(R.id.incidentesRecycler);
         incidentesRecycler.setHasFixedSize(true);
         LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
         incidentesRecycler.setLayoutManager(incidentesLayoutManager);

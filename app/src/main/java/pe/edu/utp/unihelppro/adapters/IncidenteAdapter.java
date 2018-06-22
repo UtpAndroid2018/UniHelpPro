@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -47,17 +49,18 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private View mView;
-        private TextView mIdView;
-        private TextView mContentView;
+        private TextView incidenteNombreUsuario;
+        private TextView incidenteFecha;
+        private TextView incidenteContenido;
+        private ImageView incidenteImagen;
         ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-            mIdView = (TextView) itemView.findViewById(R.id.item_number);
-            mContentView = (TextView) itemView.findViewById(R.id.content);
-            //lbl_name = (TextView) itemView.findViewById(R.id.lbl_name);
-            //lbl_representante = (TextView) itemView.findViewById(R.id.lbl_representante);
-            //lbl_proyectos = (TextView) itemView.findViewById(R.id.lbl_proyectos);
-            //lbl_fecha = (TextView) itemView.findViewById(R.id.lbl_fecha);
+            incidenteNombreUsuario = (TextView) itemView.findViewById(R.id.incidenteNombreUsuario);
+            incidenteFecha = (TextView) itemView.findViewById(R.id.incidenteFecha);
+            incidenteContenido = (TextView) itemView.findViewById(R.id.incidenteContenido);
+            incidenteImagen = (ImageView) itemView.findViewById(R.id.incidenteImagen);
+
             //dividerProject= (ImageView) itemView.findViewById(R.id.dividerProject);
         }
     }
@@ -66,8 +69,9 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
     public void onBindViewHolder(final ViewHolder holder, final int pt) {
         final int position = holder.getAdapterPosition();
 
-        holder.mIdView.setText(incidentes.get(position).getEstado());
-        holder.mContentView.setText(incidentes.get(position).getDescripcion());
+        holder.incidenteContenido.setText(incidentes.get(position).getDescripcion());
+        Picasso.with(mContext).load( incidentes.get(position).getFoto() ).into( holder.incidenteImagen );
+
         if ( position == this.incidentes.size() - 1 ){
             //holder.dividerProject.setVisibility(View.GONE);
         }

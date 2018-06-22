@@ -34,9 +34,18 @@ public class Incidentes extends SugarRecord implements Serializable {
     private String categoria = "";
     private String descripcion = "";
     private String estado = "";
+    private String foto = "";
     private String pabellon = "";
     private UsuarioBackendless usuarioEmisor;
     private UsuarioBackendless usuarioReceptor;
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
 
     public UsuarioBackendless getUsuarioEmisor() {
         return usuarioEmisor;

@@ -95,7 +95,7 @@ public class IncidentesFragment extends Fragment {
             }
         });
         mSectionsPagerAdapter.notifyDataSetChanged();
-        if( Connect.getInstance().getIncidentesPublicos() == null ){
+        //if( Connect.getInstance().getIncidentesPublicos() == null ){
 
             IDataStore<Map> incidentesStorage = Backendless.Data.of( "Incidentes" );
             DataQueryBuilder queryBuilder = DataQueryBuilder.create();
@@ -176,7 +176,7 @@ public class IncidentesFragment extends Fragment {
                     Toast.makeText(getContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             } );
-        }
+        //}
 
         return view;
     }
