@@ -165,7 +165,7 @@ public class CrearSolicitudFragment extends Fragment implements SelectImageDialo
                     Picasso.with(mContext).load( new File( path ) ).into(previewImageView);
                     //imageview.setImageBitmap(bitmap);
 
-                } catch (IOException e) {
+                } catch (IOException e ) {
                     e.printStackTrace();
                     Toast.makeText(Connect.getInstance(), "Failed!", Toast.LENGTH_SHORT).show();
                 }

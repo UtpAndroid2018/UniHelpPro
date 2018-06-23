@@ -75,4 +75,11 @@
     <string name="dejanos_un_comentario">Dejanos un comentario:</string>
     <string name="reportar_incidente">Reportar Incidente</string>
     <string name="detalla_el_motivo">Detalla el motivo:</string>
+    <string name="exampleNombre">Nicanor David Quispe Cuadros</string>
+    <string name="imagen_incidente">Imagen Incidente</string>
+    <string name="exampleTexto">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="exampleFecha">16 de Enero a las 5:25pm</string>
+    <string name="me_gustas">20 me gustas</string>
+    <string name="comentarios">10 comentarios</string>
+    <string name="comentar">Comentar</string>
 </resources>
