@@ -13,6 +13,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.IDataStore;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessException;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.backendless.persistence.local.UserIdStorageFactory;
@@ -72,8 +73,10 @@ public class IncidentesFragment extends Fragment {
             if ( inc.getPublico() ){
                 incidentesPublicasList.add( inc );
             }
-            if (inc.getUsuarioEmisor().getObjectId().equals(currentUserObjectId) ) {
-                incidentesPropiasList.add( inc );
+            if ( inc.getUsuarioEmisor() != null ) {
+                if (inc.getUsuarioEmisor().getObjectId().equals(currentUserObjectId) ) {
+                    incidentesPropiasList.add( inc );
+                }
             }
         }
         Connect.getInstance().setIncidentesPublicos( incidentesPublicasList );
@@ -97,10 +100,12 @@ public class IncidentesFragment extends Fragment {
         mSectionsPagerAdapter.notifyDataSetChanged();
         //if( Connect.getInstance().getIncidentesPublicos() == null ){
 
+        try {
             IDataStore<Map> incidentesStorage = Backendless.Data.of( "Incidentes" );
             DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-            queryBuilder.setWhereClause( "(publico=true)or(usuarioEmisor='"+ currentUserObjectId +"')" );
-            queryBuilder.setSortBy( "fecha" );
+            queryBuilder.setWhereClause( "( publico=true ) or ( ( usuarioEmisor!=null ) and ( usuarioEmisor='"+ currentUserObjectId +"' ) )" );
+            //queryBuilder.setWhereClause( "(publico=true)or(usuarioEmisor='"+ currentUserObjectId +"')" );
+            queryBuilder.setSortBy( "-fecha");
             queryBuilder.setPageSize( 20 );
             incidentesStorage.find( queryBuilder, new AsyncCallback<List<Map>>() {
                 @Override
@@ -177,7 +182,9 @@ public class IncidentesFragment extends Fragment {
                 }
             } );
         //}
-
+        } catch ( BackendlessException exception ) {
+            Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+        }
         return view;
     }
 

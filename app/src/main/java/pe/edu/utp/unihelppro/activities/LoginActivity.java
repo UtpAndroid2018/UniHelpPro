@@ -51,10 +51,6 @@ import java.util.UUID;
 public class LoginActivity extends AppCompatActivity implements MSALAuthenticationCallback {
 
     private static final String TAG = "LoginActivity";
-    private EditText mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
     private Context mContext;
     private AuthenticationResult mAuthResult;
 
@@ -89,33 +85,9 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
         Bundle extras = getIntent().getExtras();
         Connect.getInstance().setConnectActivity(this);
 
-        mEmailView = (EditText) findViewById(R.id.email);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         mContext = this;
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
 
         if (mApplication == null) {
             mApplication = new PublicClientApplication(
@@ -237,72 +209,6 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
     }
 
 
-    private void attemptLogin() {
-
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            focusView.requestFocus();
-        } else {
-            showProgress(true);
-            Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
-                public void handleResponse(BackendlessUser user) {
-                    //Toast.makeText(mContext, user.getEmail() + " " + user.getUserId(), Toast.LENGTH_SHORT).show();
-                    showProgress(false);
-                    Backendless.Messaging.registerDevice(Defaults.gcmSenderID, "default", new AsyncCallback<Void>() {
-
-                        @Override
-                        public void handleResponse(Void response) {
-
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-
-                        }
-                    });
-                    gotoMain();
-                }
-
-                public void handleFault(BackendlessFault fault) {
-                    switch (fault.getCode()) {
-                        case "2002":
-                            //Toast.makeText(mContext, "", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                    //Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                    //mPasswordView.setError(getString(R.string.error_incorrect_password));
-                    mPasswordView.setError(fault.getMessage());
-                    mPasswordView.requestFocus();
-                    showProgress(false);
-                }
-            });
-        }
-    }
-
     private void gotoMain() {
         Navigation.getInstance().startActivity(this, new Bundle(), getString(R.string.MainActivityClassName), true);
     }
@@ -310,16 +216,6 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
     private boolean isEmailValid(String email) {
 
         return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-
-        return password.length() > 4;
-    }
-
-    private void showProgress(final boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -343,52 +239,44 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
         }
 
         String domain = preferredUsername;
-        int index = domain.indexOf('@');
+        final int index = domain.indexOf('@');
         domain = domain.substring(index+1);
 
-        if( domain.equals("utp.edu.pe") ) {
+        if( isEmailValid( preferredUsername ) &&  domain.equals("utp.edu.pe") ) {
             SharedPrefsUtils sharedPrefsUtils =  SharedPrefsUtils.getInstance() ;
             sharedPrefsUtils.setStringPreference( Constants.ARG_GIVEN_NAME, name );
             sharedPrefsUtils.setStringPreference(Constants.ARG_DISPLAY_ID, preferredUsername);
 
             Connect.getInstance().setUserOutlook( mAuthResult.getUser() );
 
-
-            if ( UserUtils.isValidLogin( mContext ) ) {
-                BackendlessUser user = Backendless.UserService.CurrentUser();
-                if( user != null ){
-                    Connect.getInstance().setUserBackendless( user );
-                    gotoMain();
-                }
-            /*
-            String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
-            Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser> ( ) {
+            final String finalName = name;
+            final String finalPreferredUsername = preferredUsername;
+            UserUtils.isValidLogin(mContext, new AsyncCallback<Boolean>() {
                 @Override
-                public void handleResponse(BackendlessUser user) {
-                    Connect.getInstance().setUserBackendless( user );
-                    gotoMain();
+                public void handleResponse(Boolean response) {
+                    if( response ) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BackendlessUser user = Backendless.UserService.CurrentUser();
+                                if( user != null ){
+                                    Connect.getInstance().setUserBackendless( user );
+                                    gotoMain();
+                                } else {
+                                    forceLogin(finalName, finalPreferredUsername, index );
+                                }
+                            }
+                        }).start();
+                    } else {
+                        forceLogin(finalName, finalPreferredUsername, index );
+                    }
                 }
 
                 @Override
                 public void handleFault(BackendlessFault fault) {
-
+                    forceLogin(finalName, finalPreferredUsername, index );
                 }
             } );
-            */
-            } else {
-                UserUtils.login( preferredUsername, preferredUsername, new AsyncCallback<BackendlessUser> () {
-                    @Override
-                    public void handleResponse(BackendlessUser user) {
-                        Connect.getInstance().setUserBackendless( user );
-                        gotoMain();
-                    }
-                    @Override
-                    public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }  );
-            }
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -398,6 +286,29 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
         }  else {
             UserUtils.logout();
         }
+    }
+
+    private void forceLogin( String name, String preferredUsername, int index ) {
+        BackendlessUser user = new BackendlessUser();
+        user.setProperty( "email", preferredUsername);
+        user.setProperty( "name", name);
+        user.setPassword( mAuthResult.getUniqueId() );
+
+        String codigo = "";
+        codigo = preferredUsername.substring(0, index);
+        user.setProperty( "codigo", codigo);
+
+        UserUtils.login( user, new AsyncCallback<BackendlessUser> () {
+            @Override
+            public void handleResponse(BackendlessUser user) {
+                Connect.getInstance().setUserBackendless( user );
+                gotoMain();
+            }
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }  );
     }
 
     @Override

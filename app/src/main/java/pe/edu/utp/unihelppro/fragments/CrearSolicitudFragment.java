@@ -24,8 +24,13 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessException;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
+import com.backendless.messaging.DeliveryOptions;
+import com.backendless.messaging.MessageStatus;
+import com.backendless.messaging.PublishOptions;
+import com.backendless.messaging.PushBroadcastMask;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages;
 import com.squareup.picasso.Picasso;
@@ -35,6 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -116,6 +122,31 @@ public class CrearSolicitudFragment extends Fragment implements SelectImageDialo
                 registrarIncidente(  );
             }
         });
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PublishOptions publishOptions = new PublishOptions();
+
+                publishOptions.putHeader( "android-ticker-text", "You just got a private push notification!" );
+                publishOptions.putHeader( "android-content-title", "This is a notification title" );
+                publishOptions.putHeader( "android-content-text", "Push Notifications are cool" );
+
+                DeliveryOptions deliveryOptions = new DeliveryOptions();
+                deliveryOptions.setPushBroadcast( PushBroadcastMask.ANDROID  );
+                Date publishDate = new Date( System.currentTimeMillis() + 5000 ); // add 20 seconds
+                deliveryOptions.setPublishAt( publishDate );
+
+                try{
+                    MessageStatus status = Backendless.Messaging.publish( "This message was scheduled 20 sec ago",
+                            publishOptions,
+                            deliveryOptions );
+                } catch ( BackendlessException e ) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         return view;
     }

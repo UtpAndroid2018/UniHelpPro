@@ -26,7 +26,9 @@ public class Navigation {
             intent.putExtras(bundle);
             intent.setClassName(context,activity);
             context.startActivity(intent);
-            if(destroy) ((Activity)(context)).finish();
+            if(destroy) {
+                ((Activity)(context)).finish();
+            }
         } catch ( ActivityNotFoundException e) {
             e.printStackTrace();
         }
@@ -54,7 +56,9 @@ public class Navigation {
                             Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             Activity mActivity= (Activity)(context);
-            if(destroy) mActivity.finish();
+            if(destroy) {
+                mActivity.finish();
+            }
 
         } catch ( ActivityNotFoundException e) {
             e.printStackTrace();

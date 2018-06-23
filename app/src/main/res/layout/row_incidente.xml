@@ -45,7 +45,6 @@
             tools:ignore="UseCompoundDrawables">
             <TextView
                 android:gravity="start|top"
-                android:lines="4"
                 android:id="@+id/incidenteContenido"
                 android:text="@string/exampleTexto"
                 android:layout_width="match_parent"
@@ -88,33 +87,42 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
-                android:paddingBottom="@dimen/activity_vertical_middle_margin"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:clickable="true"
-                    android:drawableStart="@drawable/ic_favorite_black"
+
+                <Button
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    style="?android:attr/buttonBarStyle"
+                    android:textColor="@color/colorSecondaryText"
+                    android:layout_gravity="center"
                     android:id="@+id/btnMeGusta"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:text="@string/me_gustas"
-                    android:textColor="@color/colorSecondaryText"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:focusable="true" />
-                <TextView
-                    android:clickable="true"
-                    android:drawableStart="@drawable/ic_mode_comment_black"
+                    android:drawableStart="@drawable/ic_favorite_black"
+                    android:text="@string/me_gustas" />
+
+                <Button
+                    style="?android:attr/buttonBarStyle"
+                    android:textColor="@color/colorSecondaryText"
+                    android:layout_gravity="center"
                     android:id="@+id/btnComentar"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:text="@string/comentar"
-                    android:textColor="@color/colorSecondaryText"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:focusable="true" />
+                    android:drawableStart="@drawable/ic_mode_comment_black"
+                    android:text="@string/comentar" />
+
             </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/linear_comentarios_incidente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_comentarios_incidente"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

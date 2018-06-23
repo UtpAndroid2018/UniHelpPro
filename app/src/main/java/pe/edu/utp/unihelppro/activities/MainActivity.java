@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         MenuItem menuItem = nvDrawer.getMenu().findItem(R.id.nav_incidentes);
         selectDrawerItem(menuItem);
-        //saveNewSolicitud();
 
     }
 
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 this.doubleBackToExitPressedOnce = true;
-                Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
                 getHandler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
