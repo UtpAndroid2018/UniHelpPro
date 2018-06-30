@@ -23,9 +23,10 @@ import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.Connect;
 import pe.edu.utp.unihelppro.fragments.AsignarIncidente;
 import pe.edu.utp.unihelppro.fragments.CalificarIncidente;
-import pe.edu.utp.unihelppro.fragments.CommentFragment;
+import pe.edu.utp.unihelppro.fragments.ReportadosFragment;
 import pe.edu.utp.unihelppro.fragments.CrearSolicitudFragment;
 import pe.edu.utp.unihelppro.fragments.IncidentesFragment;
+import pe.edu.utp.unihelppro.fragments.PreguntasFragment;
 import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
 import pe.edu.utp.unihelppro.utils.Navigation;
 import pe.edu.utp.unihelppro.utils.UserUtils;
@@ -106,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
         Navigation.getInstance().startActivity( this, new Bundle(), getString(R.string.LoginActivityClassName), true);
     }
 
+    private void gotoEstadisticas() {
+        Navigation.getInstance().startActivity( this, new Bundle(), getString(R.string.EstadisticasActivityClassName), true);
+    }
+
     public void selectDrawerItem(MenuItem menuItem) {
         Class fragmentClass;
         switch(menuItem.getItemId()) {
@@ -121,16 +126,20 @@ public class MainActivity extends AppCompatActivity {
                 mDrawer.closeDrawers();
                 gotoLogin();
                 return;
-            /*
-            case R.id.nav_second_fragment:
-                fragmentClass = SecondFragment.class;
+            case R.id.nav_estadisticas:
+                gotoEstadisticas();
+                return;
+            case R.id.nav_preguntas_frecuentes:
+                fragmentClass = PreguntasFragment.class;
                 break;
-            case R.id.nav_third_fragment:
-                fragmentClass = ThirdFragment.class;
+            case R.id.nav_usuarios_reportado:
+            case R.id.nav_personal_reportado:
+                fragmentClass = ReportadosFragment.class;
                 break;
-            */
             default:
-                fragmentClass = CommentFragment.class;
+                //fragmentClass = ReportadosFragment.class;
+                mDrawer.closeDrawers();
+                return;
         }
 
         try {

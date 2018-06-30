@@ -14,8 +14,14 @@
             android:id="@+id/nav_preguntas_frecuentes"
             android:title="@string/preguntas_frecuentes" />
         <item
+            android:id="@+id/nav_usuarios_reportado"
+            android:title="@string/usuarios_reportado" />
+        <item
             android:id="@+id/nav_personal_reportado"
             android:title="@string/personal_reportado" />
+        <item
+            android:id="@+id/nav_estadisticas"
+            android:title="@string/estadisticas" />
         <item
             android:id="@+id/nav_cerrar_sesion"
             android:title="@string/cerrar_sesion" />

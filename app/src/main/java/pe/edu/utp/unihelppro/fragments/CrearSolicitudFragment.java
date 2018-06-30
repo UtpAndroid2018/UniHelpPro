@@ -50,12 +50,7 @@ import pe.edu.utp.unihelppro.Connect;
 
 import static android.app.Activity.RESULT_CANCELED;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CrearSolicitudFragment.OnActionCrearSolicitudFragmentListener} interface
- * to handle interaction events.
- */
+
 public class CrearSolicitudFragment extends Fragment implements SelectImageDialogFragment.Listener {
 
     private OnActionCrearSolicitudFragmentListener mListener;
@@ -123,7 +118,6 @@ public class CrearSolicitudFragment extends Fragment implements SelectImageDialo
             }
         });
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -135,7 +129,7 @@ public class CrearSolicitudFragment extends Fragment implements SelectImageDialo
 
                 DeliveryOptions deliveryOptions = new DeliveryOptions();
                 deliveryOptions.setPushBroadcast( PushBroadcastMask.ANDROID  );
-                Date publishDate = new Date( System.currentTimeMillis() + 5000 ); // add 20 seconds
+                Date publishDate = new Date( System.currentTimeMillis() + 5000 ); // add 5 seconds
                 deliveryOptions.setPublishAt( publishDate );
 
                 try{
@@ -151,7 +145,6 @@ public class CrearSolicitudFragment extends Fragment implements SelectImageDialo
         return view;
     }
 
-
     @Override
     public void onItemImageClicked(int position) {
         switch (position) {
@@ -163,8 +156,6 @@ public class CrearSolicitudFragment extends Fragment implements SelectImageDialo
                 break;
         }
     }
-
-
 
     private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);

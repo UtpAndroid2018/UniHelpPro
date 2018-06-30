@@ -1,46 +1,54 @@
-package pe.edu.utp.unihelppro.fragments;
+package pe.edu.utp.unihelppro.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import pe.edu.utp.unihelppro.R;
-import pe.edu.utp.unihelppro.fragments.CommentFragment.OnListFragmentInteractionListener;
-import pe.edu.utp.unihelppro.fragments.dummy.DummyContent.DummyItem;
-
 import java.util.List;
 
+import pe.edu.utp.unihelppro.R;
+import pe.edu.utp.unihelppro.models.PreguntasFrecuentes;
 
-public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+public class PreguntasAdapter extends RecyclerView.Adapter<PreguntasAdapter.ViewHolder> {
 
-    public CommentsRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    private List<PreguntasFrecuentes> mValues;
+    private OnPreguntasListener mListener;
+    private Context mContext;
+
+
+    public interface OnPreguntasListener {
+        void onPreguntaInteraction(PreguntasFrecuentes item);
+    }
+
+    public PreguntasAdapter(List<PreguntasFrecuentes> items, Context context, OnPreguntasListener listener) {
         mValues = items;
         mListener = listener;
+        mContext = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_comment, parent, false);
+                .inflate(R.layout.row_pregunta, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText( "" + ( position + 1 ) );
+        holder.mTitle.setText(mValues.get(position).getTitulo());
+        holder.mContentView.setText(mValues.get(position).getDescripcion());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onPreguntaInteraction(holder.mItem);
                 }
             }
         });
@@ -52,15 +60,17 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        final View mView;
+        final TextView mIdView;
+        final TextView mContentView;
+        final TextView mTitle;
+        PreguntasFrecuentes mItem;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
+            mTitle = (TextView) view.findViewById(R.id.item_title);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 

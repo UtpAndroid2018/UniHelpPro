@@ -96,10 +96,7 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
         }
 
         if (!hasAzureConfiguration()) {
-            Toast.makeText(
-                    LoginActivity.this,
-                    getString(R.string.warning_client_id_redirect_uri_incorrect),
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, getString(R.string.warning_client_id_redirect_uri_incorrect), Toast.LENGTH_LONG).show();
             resetUIForConnect();
             return;
         }
@@ -294,8 +291,7 @@ public class LoginActivity extends AppCompatActivity implements MSALAuthenticati
         user.setProperty( "name", name);
         user.setPassword( mAuthResult.getUniqueId() );
 
-        String codigo = "";
-        codigo = preferredUsername.substring(0, index);
+        String codigo = preferredUsername.substring(0, index);
         user.setProperty( "codigo", codigo);
 
         UserUtils.login( user, new AsyncCallback<BackendlessUser> () {

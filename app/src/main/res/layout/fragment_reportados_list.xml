@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.IncidenteFragment">
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/incidentesRecycler"
+    tools:context=".fragments.ReportadosFragment">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
         android:name="pe.edu.markham.app.fragments.CommentFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.IncidenteFragment"
+        tools:context=".fragments.ReportadosFragment"
         tools:listitem="@layout/row_reportado" />
 </FrameLayout>

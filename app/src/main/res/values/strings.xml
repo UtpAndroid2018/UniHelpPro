@@ -27,6 +27,7 @@
     <string name="sin_opcion">Sin Opción</string>
     <string name="MainActivityClassName">pe.edu.utp.unihelppro.activities.MainActivity</string>
     <string name="LoginActivityClassName">pe.edu.utp.unihelppro.activities.LoginActivity</string>
+    <string name="EstadisticasActivityClassName">pe.edu.utp.unihelppro.activities.EstadisticasActivity</string>
     <string name="title_activity_crear_solicitud">CrearSolicitudActivity</string>
 
 
@@ -47,6 +48,7 @@
     <string name="anadir_incidente">Añadir incidente</string>
     <string name="preguntas_frecuentes">Preguntas frecuentes</string>
     <string name="personal_reportado">Personal reportado</string>
+    <string name="usuarios_reportado">Usuarios reportado</string>
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="title_activity_solicitudes">SolicitudesActivity</string>
     <string name="tab_text_1">Tab 1</string>
@@ -82,4 +84,7 @@
     <string name="me_gustas">20 me gustas</string>
     <string name="comentarios">10 comentarios</string>
     <string name="comentar">Comentar</string>
+    <string name="estadisticas">Estadísticas</string>
+    <string name="title_activity_estadisticas">EstadisticasActivity</string>
+    <string name="reportes">Reportes</string>
 </resources>

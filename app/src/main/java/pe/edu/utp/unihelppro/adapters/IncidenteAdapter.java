@@ -115,13 +115,9 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                     ObjectMapper mapper = new ObjectMapper();
                     try {
                         Gson gson = new Gson();
-                        Object pt = map.get("usuario");
                         String json = gson.toJson( map );
                         Comentarios comentario = gson.fromJson(json, Comentarios.class);
-
-
-                        //Comentarios comentario = mapper.convertValue(map, Comentarios.class);
-                        //comentario.save();
+                        comentario.save();
                         comentariosList.add( comentario );
 
                     } catch ( IllegalArgumentException exception ) {

@@ -17,6 +17,8 @@ import android.support.multidex.MultiDexApplication;
 import java.util.List;
 
 import pe.edu.utp.unihelppro.models.Incidentes;
+import pe.edu.utp.unihelppro.models.PreguntasFrecuentes;
+import pe.edu.utp.unihelppro.models.Reportados;
 import pe.edu.utp.unihelppro.utils.SharedPrefsUtils;
 public class Connect extends MultiDexApplication  {
     public static Connect instance;
@@ -34,6 +36,24 @@ public class Connect extends MultiDexApplication  {
     private BackendlessUser userBackendless;
     private List<Incidentes> incidentesPublicos;
     private List<Incidentes> incidentesPropios;
+    private List<Reportados> reportados;
+    private List<PreguntasFrecuentes> preguntasFrecuentes;
+
+    public List<Reportados> getReportados() {
+        return reportados;
+    }
+
+    public void setReportados(List<Reportados> reportados) {
+        this.reportados = reportados;
+    }
+
+    public List<PreguntasFrecuentes> getPreguntasFrecuentes() {
+        return preguntasFrecuentes;
+    }
+
+    public void setPreguntasFrecuentes(List<PreguntasFrecuentes> preguntasFrecuentes) {
+        this.preguntasFrecuentes = preguntasFrecuentes;
+    }
 
     public List<Incidentes> getIncidentesPublicos() {
         return incidentesPublicos;

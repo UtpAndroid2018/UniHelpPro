@@ -25,6 +25,7 @@ import com.microsoft.identity.client.MsalUiRequiredException;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -82,11 +83,8 @@ public class SplashActivity extends AppCompatActivity implements MSALAuthenticat
     }
 
     private void connect() {
-
         AuthenticationManager mgr = AuthenticationManager.getInstance();
-
-        List<User> users = null;
-
+        List<User> users = new ArrayList<>();
         try {
             users = mApplication.getUsers();
 
@@ -175,10 +173,6 @@ public class SplashActivity extends AppCompatActivity implements MSALAuthenticat
 
     }
 
-    private void showConnectingInProgressUI() {
-
-    }
-
     private void showConnectErrorUI() {
         Toast.makeText(
                 SplashActivity.this,
@@ -233,7 +227,6 @@ public class SplashActivity extends AppCompatActivity implements MSALAuthenticat
             sharedPrefsUtils.setStringPreference(Constants.ARG_DISPLAY_ID, preferredUsername);
             Connect.getInstance().setUserOutlook( mAuthResult.getUser() );
 
-
             final String finalName = name;
             final String finalPreferredUsername = preferredUsername;
             UserUtils.isValidLogin(mContext, new AsyncCallback<Boolean>() {
@@ -252,18 +245,15 @@ public class SplashActivity extends AppCompatActivity implements MSALAuthenticat
                                 }
                             }
                         }).start();
-
                     } else {
                         forceLogin(finalName, finalPreferredUsername, index );
                     }
                 }
-
                 @Override
                 public void handleFault(BackendlessFault fault) {
                     forceLogin(finalName, finalPreferredUsername, index );
                 }
             } );
-
 
             new Thread(new Runnable() {
                 @Override
@@ -284,8 +274,7 @@ public class SplashActivity extends AppCompatActivity implements MSALAuthenticat
         user.setProperty( "name", name);
         user.setPassword( mAuthResult.getUniqueId() );
 
-        String codigo = "";
-        codigo = preferredUsername.substring(0, index);
+        String codigo = preferredUsername.substring(0, index);
         user.setProperty( "codigo", codigo);
 
         UserUtils.login( user, new AsyncCallback<BackendlessUser> () {

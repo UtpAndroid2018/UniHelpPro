@@ -128,5 +128,4 @@ public class Incidentes extends SugarRecord implements Serializable {
         this.pabellon = pabellon;
     }
 
-
 }
