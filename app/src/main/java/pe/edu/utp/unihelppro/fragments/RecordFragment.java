@@ -133,7 +133,7 @@ public class RecordFragment extends DialogFragment implements VoiceView.OnRecord
                 wallpaperDirectory.mkdirs();
             }
             File f = new File(wallpaperDirectory, Calendar.getInstance()
-                    .getTimeInMillis() + ".jpg");
+                    .getTimeInMillis() + ".mp3");
             f.createNewFile();
             mCurrentAudioPath = f.getAbsolutePath();
             mMediaRecorder.setOutputFile( mCurrentAudioPath );
