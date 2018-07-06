@@ -1,6 +1,7 @@
 package pe.edu.utp.unihelppro.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
 import com.backendless.IDataStore;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessException;
@@ -18,6 +18,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.backendless.persistence.local.UserIdStorageFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orm.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,6 @@ import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.adapters.SectionsPagerAdapter;
 import pe.edu.utp.unihelppro.Connect;
 import pe.edu.utp.unihelppro.models.Incidentes;
-import pe.edu.utp.unihelppro.models.UsuarioBackendless;
 
 public class IncidentesFragment extends Fragment {
     
@@ -45,13 +45,13 @@ public class IncidentesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_incidentes, container, false);
 
 
         mSectionsPagerAdapter = new SectionsPagerAdapter( getChildFragmentManager());
-        mViewPager = (ViewPager) view.findViewById(R.id.viewPagerIncidentes);
+        mViewPager = view.findViewById(R.id.viewPagerIncidentes);
 
 
         IncidenteFragment publicos;
@@ -66,9 +66,9 @@ public class IncidentesFragment extends Fragment {
 
         List<Incidentes> incidentesPublicasList = new ArrayList<>();
         List<Incidentes> incidentesPropiasList = new ArrayList<>();
-        List<Incidentes> incidentesList = Incidentes.listAll( Incidentes.class );
+        List<Incidentes> incidentesList = Select.from(Incidentes.class).orderBy("-FECHA").list();
 
-        String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+        final String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
         for ( Incidentes inc: incidentesList) {
             if ( inc.getPublico() ){
                 incidentesPublicasList.add( inc );
@@ -85,7 +85,7 @@ public class IncidentesFragment extends Fragment {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
         assert tabLayout != null;
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -98,9 +98,9 @@ public class IncidentesFragment extends Fragment {
             }
         });
         mSectionsPagerAdapter.notifyDataSetChanged();
-        //if( Connect.getInstance().getIncidentesPublicos() == null ){
 
         try {
+            //if( Connect.getInstance().getIncidentesPublicos() == null ){
             IDataStore<Map> incidentesStorage = Backendless.Data.of( "Incidentes" );
             DataQueryBuilder queryBuilder = DataQueryBuilder.create();
             queryBuilder.setWhereClause( "( publico=true ) or ( ( usuarioEmisor!=null ) and ( usuarioEmisor='"+ currentUserObjectId +"' ) )" );
@@ -110,7 +110,7 @@ public class IncidentesFragment extends Fragment {
             incidentesStorage.find( queryBuilder, new AsyncCallback<List<Map>>() {
                 @Override
                 public void handleResponse( List<Map> maps ) {
-                    List<Incidentes> incidentesList = new ArrayList<>();
+                    //List<Incidentes> incidentesList = new ArrayList<>();
                     List<Incidentes> incidentesPublicasList = new ArrayList<>();
                     List<Incidentes> incidentesPropiasList = new ArrayList<>();
                     mSectionsPagerAdapter = new SectionsPagerAdapter( getChildFragmentManager());
@@ -127,38 +127,9 @@ public class IncidentesFragment extends Fragment {
                         ObjectMapper mapper = new ObjectMapper();
                         try {
                             Incidentes incidente = mapper.convertValue(map, Incidentes.class);
-                            UsuarioBackendless ue = incidente.getUsuarioEmisor();
-                            if ( ue != null ) {
-                                ue.setObjectId( incidente.getUsuarioEmisor().getObjectId() );
-                                ue.setEmail( incidente.getUsuarioEmisor().getEmail() );
-                                for ( Object key : map.keySet() ) {
-                                    if( key.equals("usuarioEmisor" ) ) {
-                                        ue.setName( ( ( BackendlessUser ) map.get( key ) ).getProperty("name").toString() );
-                                        ue.setSocialAccount( ( ( BackendlessUser ) map.get( key ) ).getProperty("socialAccount").toString() );
-                                        ue.setUserStatus( ( ( BackendlessUser ) map.get( key ) ).getProperty("userStatus").toString() );
-                                        ue.setTipo( ( ( BackendlessUser ) map.get( key ) ).getProperty("tipo").toString() );
-                                        ue.setCodigo( ( ( BackendlessUser ) map.get( key ) ).getProperty("codigo").toString() );
-                                    }
-                                }
-                                ue.setupUser();
-                            }
-                            UsuarioBackendless ur = incidente.getUsuarioReceptor();
-                            if ( ur != null ) {
-                                ur.setObjectId( incidente.getUsuarioReceptor().getObjectId() );
-                                ur.setEmail( incidente.getUsuarioReceptor().getEmail() );
-                                for ( Object key : map.keySet() ) {
-                                    if( key.equals("usuarioReceptor" ) ) {
-                                        ur.setName( ( ( BackendlessUser ) map.get( key ) ).getProperty("name").toString() );
-                                        ur.setSocialAccount( ( ( BackendlessUser ) map.get( key ) ).getProperty("socialAccount").toString() );
-                                        ur.setUserStatus( ( ( BackendlessUser ) map.get( key ) ).getProperty("userStatus").toString() );
-                                        ur.setTipo( ( ( BackendlessUser ) map.get( key ) ).getProperty("tipo").toString() );
-                                        ur.setCodigo( ( ( BackendlessUser ) map.get( key ) ).getProperty("codigo").toString() );
-                                    }
-                                }
-                                ur.setupUser();
-                            }
+                            incidente.setupUsers( map );
                             incidente.save();
-                            incidentesList.add( incidente );
+                            //incidentesList.add( incidente );
                             if ( incidente.getPublico() ){
                                 incidentesPublicasList.add( incidente );
                             }
@@ -181,10 +152,16 @@ public class IncidentesFragment extends Fragment {
                     Toast.makeText(getContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             } );
-        //}
+            //}
         } catch ( BackendlessException exception ) {
             Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }).start();
         return view;
     }
 

@@ -1,15 +1,17 @@
 package pe.edu.utp.unihelppro.models;
 
+import com.backendless.BackendlessUser;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Incidentes extends SugarRecord implements Serializable {
     @Unique
-    private String objectId;
+    private String objectId = "";
 
     public String getObjectId() {
         return objectId;
@@ -25,6 +27,39 @@ public class Incidentes extends SugarRecord implements Serializable {
 
     public void setUsuarioReceptor(UsuarioBackendless usuarioReceptor) {
         this.usuarioReceptor = usuarioReceptor;
+    }
+
+    public void setupUsers( Map map ) {
+        UsuarioBackendless ue = getUsuarioEmisor();
+        if ( ue != null ) {
+            ue.setObjectId( getUsuarioEmisor().getObjectId() );
+            ue.setEmail( getUsuarioEmisor().getEmail() );
+            for ( Object key : map.keySet() ) {
+                if( key.equals("usuarioEmisor" ) ) {
+                    ue.setName( ( (BackendlessUser) map.get( key ) ).getProperty("name").toString() );
+                    ue.setSocialAccount( ( ( BackendlessUser ) map.get( key ) ).getProperty("socialAccount").toString() );
+                    ue.setUserStatus( ( ( BackendlessUser ) map.get( key ) ).getProperty("userStatus").toString() );
+                    ue.setTipo( ( ( BackendlessUser ) map.get( key ) ).getProperty("tipo").toString() );
+                    ue.setCodigo( ( ( BackendlessUser ) map.get( key ) ).getProperty("codigo").toString() );
+                }
+            }
+            ue.setupUser();
+        }
+        UsuarioBackendless ur = getUsuarioReceptor();
+        if ( ur != null ) {
+            ur.setObjectId( getUsuarioReceptor().getObjectId() );
+            ur.setEmail( getUsuarioReceptor().getEmail() );
+            for ( Object key : map.keySet() ) {
+                if( key.equals("usuarioReceptor" ) ) {
+                    ur.setName( ( ( BackendlessUser ) map.get( key ) ).getProperty("name").toString() );
+                    ur.setSocialAccount( ( ( BackendlessUser ) map.get( key ) ).getProperty("socialAccount").toString() );
+                    ur.setUserStatus( ( ( BackendlessUser ) map.get( key ) ).getProperty("userStatus").toString() );
+                    ur.setTipo( ( ( BackendlessUser ) map.get( key ) ).getProperty("tipo").toString() );
+                    ur.setCodigo( ( ( BackendlessUser ) map.get( key ) ).getProperty("codigo").toString() );
+                }
+            }
+            ur.setupUser();
+        }
     }
 
     private Boolean publico = false;

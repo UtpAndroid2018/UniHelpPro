@@ -68,6 +68,7 @@ public class PreguntasFragment extends Fragment implements  PreguntasAdapter.OnP
         listRecycler = (RecyclerView) view.findViewById(R.id.list);
         listRecycler.setHasFixedSize(true);
         LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
+        //incidentesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listRecycler.setLayoutManager(incidentesLayoutManager);
 
         List<PreguntasFrecuentes> preguntasFrecuentes = Connect.getInstance().getPreguntasFrecuentes();
@@ -108,6 +109,7 @@ public class PreguntasFragment extends Fragment implements  PreguntasAdapter.OnP
 
                 listRecycler.setHasFixedSize(true);
                 LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
+                //incidentesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 listRecycler.setLayoutManager(incidentesLayoutManager);
                 PreguntasAdapter listAdapter = new PreguntasAdapter(preguntasFrecuentes, mContext, PreguntasFragment.this );
                 listRecycler.setAdapter(listAdapter);

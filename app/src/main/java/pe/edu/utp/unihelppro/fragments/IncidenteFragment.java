@@ -69,6 +69,7 @@ public class IncidenteFragment extends Fragment {
         incidentesRecycler = (RecyclerView) view.findViewById(R.id.incidentesRecycler);
         incidentesRecycler.setHasFixedSize(true);
         LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
+        //incidentesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         incidentesRecycler.setLayoutManager(incidentesLayoutManager);
 
         if( publicos ){

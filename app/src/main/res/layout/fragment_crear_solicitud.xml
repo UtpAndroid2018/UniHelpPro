@@ -28,6 +28,7 @@
                     android:text="@string/sede" />
 
                 <Spinner
+                    android:entries="@array/sedeList"
                     android:id="@+id/inputSede"
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
@@ -47,6 +48,7 @@
                     android:text="@string/pabell_n" />
 
                 <Spinner
+                    android:entries="@array/pabellonList"
                     android:id="@+id/inputPabellon"
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
@@ -66,6 +68,7 @@
                     android:text="@string/aula" />
 
                 <Spinner
+                    android:entries="@array/aulaList"
                     android:id="@+id/inputAula"
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
@@ -85,6 +88,7 @@
                     android:text="@string/categor_a" />
 
                 <Spinner
+                    android:entries="@array/categoriaList"
                     android:id="@+id/inputCategoria"
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"

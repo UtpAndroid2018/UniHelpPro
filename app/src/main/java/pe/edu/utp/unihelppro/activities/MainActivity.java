@@ -34,7 +34,7 @@ import pe.edu.utp.unihelppro.utils.UserUtils;
 public class MainActivity extends AppCompatActivity {
 
     private Context mContext;
-    private NavigationView nvDrawer;
+    public NavigationView nvDrawer;
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;

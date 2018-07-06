@@ -87,4 +87,34 @@
     <string name="estadisticas">Estadísticas</string>
     <string name="title_activity_estadisticas">EstadisticasActivity</string>
     <string name="reportes">Reportes</string>
+
+
+    <string-array name="categoriaList">
+        <item>Seleccione</item>
+        <item>Limpieza</item>
+        <item>Aula y Laboratorio</item>
+        <item>Seguridad</item>
+    </string-array>
+    <string-array name="aulaList">
+        <item>101</item>
+        <item>102</item>
+        <item>103</item>
+        <item>104</item>
+        <item>105</item>
+    </string-array>
+    <string-array name="sedeList">
+        <item>Seleccione</item>
+        <item>Lima Centro</item>
+        <item>San Juan de Lurigancho</item>
+        <item>Lima Norte</item>
+        <item>Chiclayo</item>
+    </string-array>
+    <string-array name="pabellonList">
+        <item>Seleccione</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+    </string-array>
 </resources>

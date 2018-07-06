@@ -1,6 +1,7 @@
 package pe.edu.utp.unihelppro.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -85,23 +86,27 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int pt) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int pt) {
         final int position = holder.getAdapterPosition();
+        Incidentes inc = incidentes.get(position);
+        if( inc.getUsuarioEmisor() != null ) {
+            holder.incidenteNombreUsuario.setText(inc.getUsuarioEmisor().getName());
+        }
 
-        holder.incidenteNombreUsuario.setText(incidentes.get(position).getUsuarioEmisor().getName());
 
         Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
         TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
-        String fecha = TimeAgo.using(Long.parseLong(incidentes.get(position).getFecha()), messages);
+        String fecha = TimeAgo.using(Long.parseLong(inc.getFecha()), messages);
         holder.incidenteFecha.setText(fecha);
-
-        holder.incidenteContenido.setText(incidentes.get(position).getDescripcion());
-        Picasso.with(mContext).load( incidentes.get(position).getFoto() ).into( holder.incidenteImagen );
-
-        if ( position == this.incidentes.size() - 1 ){
-            //holder.dividerProject.setVisibility(View.GONE);
+        if( !inc.getDescripcion().equals("") ) {
+            holder.incidenteContenido.setText(inc.getDescripcion());
         }
-
+        if ( inc.getFoto() != null && !inc.getFoto().equals("") ) {
+            Picasso.with(mContext).load( inc.getFoto() ).into( holder.incidenteImagen );
+        } else {
+            holder.incidenteImagen.setVisibility(View.GONE);
+        }
+        /*
         IDataStore<Map> incidentesStorage = Backendless.Data.of( "Comentarios" );
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause( "incidente='"+ incidentes.get(position).getObjectId() +"'" );
@@ -127,6 +132,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
 
                 holder.recycler_comentarios_incidente.setHasFixedSize(true);
                 LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
+                //incidentesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 holder.recycler_comentarios_incidente.setLayoutManager(incidentesLayoutManager);
 
                 ComentarioAdapter incidentesAdapter = new ComentarioAdapter(comentariosList, mContext );
@@ -137,5 +143,6 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 Toast.makeText(getContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } );
+        */
     }
 }

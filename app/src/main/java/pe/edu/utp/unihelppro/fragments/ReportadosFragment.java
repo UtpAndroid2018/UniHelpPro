@@ -61,6 +61,7 @@ public class ReportadosFragment extends Fragment implements ReportadosAdapter.On
         listRecycler = (RecyclerView) view.findViewById(R.id.list);
         listRecycler.setHasFixedSize(true);
         LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
+        //incidentesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listRecycler.setLayoutManager(incidentesLayoutManager);
 
         String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
@@ -115,6 +116,7 @@ public class ReportadosFragment extends Fragment implements ReportadosAdapter.On
 
                 listRecycler.setHasFixedSize(true);
                 LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
+                //incidentesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 listRecycler.setLayoutManager(incidentesLayoutManager);
                 ReportadosAdapter listAdapter = new ReportadosAdapter(reportadosList, mContext, ReportadosFragment.this );
                 listRecycler.setAdapter(listAdapter);

@@ -20,6 +20,13 @@ public class UsuarioBackendless extends SugarRecord implements Serializable {
     private String tipo = "";
     private String codigo = "";
 
+    public UsuarioBackendless() {
+    }
+
+    public UsuarioBackendless(String objectId) {
+        this.objectId = objectId;
+    }
+
     public String getObjectId() {
         return objectId;
     }
