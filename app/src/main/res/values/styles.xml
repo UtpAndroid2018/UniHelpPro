@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorPrimaryLight</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -20,7 +21,8 @@
     <style name="FixedDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowNoTitle">false</item>
-        <item name="android:windowMinWidthMajor">100%</item>
-        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="colorControlHighlight">@color/colorPrimaryLight</item>
     </style>
 </resources>

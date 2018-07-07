@@ -90,8 +90,9 @@ public class RecordFragment extends DialogFragment implements VoiceView.OnRecord
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         View view = inflater.inflate(R.layout.fragment_record, container, false);
         mVoiceView = (VoiceView) view.findViewById(R.id.voiceview);
@@ -121,9 +122,6 @@ public class RecordFragment extends DialogFragment implements VoiceView.OnRecord
     @Override
     public void onRecordStart() {
         try {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-            String audioFileName = "AUDIO_" + timeStamp;
-
             mMediaRecorder = new MediaRecorder();
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);

@@ -173,11 +173,10 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
         rf.show(getChildFragmentManager(), "dialog");
     }
 
-
-
     private void uploadAudio(final BackendlessFile photoFile ) {
         File f = new File( currentPathAudio );
-        Backendless.Files.upload( f, IMAGE_DIRECTORY_NAME, new AsyncCallback<BackendlessFile>() {
+        Backendless.Files.upload( f, IMAGE_DIRECTORY_NAME,
+                new AsyncCallback<BackendlessFile>() {
                     @Override
                     public void handleResponse( final BackendlessFile backendlessFile ) {
                         registrarIncidente( photoFile, backendlessFile );
@@ -262,11 +261,9 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
                     currentPathImage = saveImage(bitmap);
-                    //Toast.makeText(Connect.getInstance(), "Image Saved!", Toast.LENGTH_SHORT).show();
 
                     previewImageView.setVisibility(View.VISIBLE);
                     Picasso.with(mContext).load( new File( currentPathImage ) ).into(previewImageView);
-                    //imageview.setImageBitmap(bitmap);
 
                 } catch (IOException e ) {
                     e.printStackTrace();
@@ -276,11 +273,9 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
 
         } else if (requestCode == CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            //imageview.setImageBitmap(thumbnail);
             currentPathImage = saveImage(thumbnail);
             previewImageView.setVisibility(View.VISIBLE);
             Picasso.with(mContext).load( new File( currentPathImage ) ).into(previewImageView);
-            //Toast.makeText(mContext, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -419,9 +414,6 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
         super.onAttach(context);
         if (context instanceof OnActionCrearSolicitudFragmentListener) {
             mListener = (OnActionCrearSolicitudFragmentListener) context;
-        } else {
-            //throw new RuntimeException(context.toString()
-            //        + " must implement OnFragmentInteractionListener");
         }
     }
 
