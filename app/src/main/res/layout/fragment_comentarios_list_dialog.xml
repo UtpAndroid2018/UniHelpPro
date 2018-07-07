@@ -32,6 +32,8 @@
             tools:context=".fragments.ComentariosDialogFragment"
             tools:listitem="@layout/row_comentario" />
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/linear_comentario"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

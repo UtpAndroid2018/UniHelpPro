@@ -62,6 +62,8 @@ public class ComentariosDialogFragment extends DialogFragment {
     private LinearLayout linear_content;
     private RecyclerView recyclerView;
     private ImageButton enviar_comentario;
+    private LinearLayout linear_comentario;
+    private Map currentIncicenteMap;
 
 
     public static ComentariosDialogFragment newInstance( String _incidenteId ) {
@@ -84,7 +86,7 @@ public class ComentariosDialogFragment extends DialogFragment {
         Objects.requireNonNull(getDialog().getWindow()).setLayout(  Math.round( width ), Math.round( height ));
         */
 
-        View view = inflater.inflate(R.layout.fragment_comentarios_list_dialog, container, false);
+        final View view = inflater.inflate(R.layout.fragment_comentarios_list_dialog, container, false);
 
         mContext = getContext();
 
@@ -94,6 +96,7 @@ public class ComentariosDialogFragment extends DialogFragment {
 
         relative_progressbar = (RelativeLayout) view.findViewById( R.id.relative_progressbar );
         linear_content = (LinearLayout) view.findViewById( R.id.linear_content );
+        linear_comentario = (LinearLayout) view.findViewById( R.id.linear_comentario );
 
         enviar_comentario = (ImageButton) view.findViewById( R.id.enviar_comentario );
         inputDescripcion = (EditText) view.findViewById( R.id.inputDescripcion );
@@ -110,7 +113,24 @@ public class ComentariosDialogFragment extends DialogFragment {
 
             }
         });
-        getComents( view );
+        Backendless.Data.of( "Incidentes" ).findById( incidenteId, new AsyncCallback<Map>() {
+            @Override
+            public void handleResponse(final Map response) {
+                Gson gson = new Gson();
+                String json = gson.toJson( response );
+                Incidentes incidente = gson.fromJson(json, Incidentes.class);
+                currentIncicenteMap = response;
+                if( incidente.getActivarComentarios() ) {
+                    linear_comentario.setVisibility(View.VISIBLE);
+                }
+                getComents( view );
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(mContext, "Ocurrió un error al consultar los comentarios", Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
@@ -167,9 +187,12 @@ public class ComentariosDialogFragment extends DialogFragment {
                     inputDescripcion.setText("");
                     enviar_comentario.setEnabled(true);
                 } else {
+                    setRelations( currentUser, currentIncicenteMap,"Comentarios" , "incidente:Comentarios:1", savedComentario, true );
+                    /*
                     Backendless.Data.of( "Incidentes" ).findById( incidenteId, new AsyncCallback<Map>() {
                         @Override
                         public void handleResponse(final Map response) {
+
                             setRelations( currentUser, response ,"Comentarios" , "incidente:Comentarios:1", savedComentario, true );
                         }
 
@@ -179,6 +202,7 @@ public class ComentariosDialogFragment extends DialogFragment {
                             enviar_comentario.setEnabled(true);
                         }
                     });
+                    */
                 }
                 //dismiss();
             }
