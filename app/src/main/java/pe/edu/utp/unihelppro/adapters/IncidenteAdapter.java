@@ -80,13 +80,11 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         private TextView incidenteFecha;
         private TextView incidenteContenido;
         private ImageView incidenteImagen;
-<<<<<<< HEAD
         private ImageView incidenteEditar;
         private RecyclerView recycler_comentarios_incidente;
-=======
+
         private Button btnMeGusta;
         private Button btnComentar;
->>>>>>> c1a0a88287658a410db014cdcdec1dccdc84b6f7
         ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -94,13 +92,11 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
             incidenteFecha = (TextView) itemView.findViewById(R.id.incidenteFecha);
             incidenteContenido = (TextView) itemView.findViewById(R.id.incidenteContenido);
             incidenteImagen = (ImageView) itemView.findViewById(R.id.incidenteImagen);
-<<<<<<< HEAD
+
             incidenteEditar = (ImageView) itemView.findViewById(R.id.incidenteEditar);
-            recycler_comentarios_incidente = (RecyclerView) itemView.findViewById(R.id.recycler_comentarios_incidente);
-=======
+
             btnMeGusta = (Button) itemView.findViewById(R.id.btnMeGusta);
             btnComentar = (Button) itemView.findViewById(R.id.btnComentar);
->>>>>>> c1a0a88287658a410db014cdcdec1dccdc84b6f7
 
             //dividerProject= (ImageView) itemView.findViewById(R.id.dividerProject);
         }
@@ -132,48 +128,14 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         } else {
             holder.incidenteImagen.setVisibility(View.GONE);
         }
-<<<<<<< HEAD
         String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
         if( !inc.getUsuarioEmisor().getObjectId().equals( currentUserObjectId )  ) {
             holder.incidenteEditar.setVisibility(View.GONE);
         }
 
-        /*
-        IDataStore<Map> incidentesStorage = Backendless.Data.of( "Comentarios" );
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.setWhereClause( "incidente='"+ incidentes.get(position).getObjectId() +"'" );
-        queryBuilder.setSortBy( "-fecha" );
-        queryBuilder.setPageSize( 2 );
-        incidentesStorage.find( queryBuilder, new AsyncCallback<List<Map>>() {
-            @Override
-            public void handleResponse( List<Map> maps ) {
-                List<Comentarios> comentariosList = new ArrayList<>();
-                for ( Map map: maps) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    try {
-                        Gson gson = new Gson();
-                        String json = gson.toJson( map );
-                        Comentarios comentario = gson.fromJson(json, Comentarios.class);
-                        comentario.save();
-                        comentariosList.add( comentario );
 
-                    } catch ( IllegalArgumentException exception ) {
-                        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                holder.recycler_comentarios_incidente.setHasFixedSize(true);
-                LinearLayoutManager incidentesLayoutManager = new LinearLayoutManager(mContext);
-                //incidentesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                holder.recycler_comentarios_incidente.setLayoutManager(incidentesLayoutManager);
-
-                ComentarioAdapter incidentesAdapter = new ComentarioAdapter(comentariosList, mContext );
-                holder.recycler_comentarios_incidente.setAdapter(incidentesAdapter);
-            }
-=======
 
         holder.btnComentar.setOnClickListener(new View.OnClickListener() {
->>>>>>> c1a0a88287658a410db014cdcdec1dccdc84b6f7
             @Override
             public void onClick(View v) {
                 openComentarios( inc.getObjectId() );
