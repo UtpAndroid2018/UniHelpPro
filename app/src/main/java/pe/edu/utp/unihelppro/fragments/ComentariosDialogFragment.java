@@ -24,9 +24,16 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.DeviceRegistration;
 import com.backendless.IDataStore;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessException;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.messaging.DeliveryOptions;
+import com.backendless.messaging.Message;
+import com.backendless.messaging.MessageStatus;
+import com.backendless.messaging.PublishOptions;
+import com.backendless.messaging.PushBroadcastMask;
 import com.backendless.persistence.DataQueryBuilder;
 import com.backendless.persistence.local.UserIdStorageFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,6 +49,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import pe.edu.utp.unihelppro.Defaults;
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.activities.MainActivity;
 import pe.edu.utp.unihelppro.adapters.ComentarioAdapter;
@@ -186,23 +194,24 @@ public class ComentariosDialogFragment extends DialogFragment {
                     Toast.makeText(mContext, "Comentario publicado", Toast.LENGTH_SHORT).show();
                     inputDescripcion.setText("");
                     enviar_comentario.setEnabled(true);
-                } else {
-                    setRelations( currentUser, currentIncicenteMap,"Comentarios" , "incidente:Comentarios:1", savedComentario, true );
+                    NotificarComentario( incidenteId );
+                    registerToChanel();
                     /*
-                    Backendless.Data.of( "Incidentes" ).findById( incidenteId, new AsyncCallback<Map>() {
+                    Backendless.Messaging.getDeviceRegistration(new AsyncCallback<DeviceRegistration>() {
                         @Override
-                        public void handleResponse(final Map response) {
-
-                            setRelations( currentUser, response ,"Comentarios" , "incidente:Comentarios:1", savedComentario, true );
+                        public void handleResponse(DeviceRegistration response) {
+                            DeviceRegistration devReg = response;
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(mContext, "Ocurrió un error al publicar el comentario", Toast.LENGTH_SHORT).show();
-                            enviar_comentario.setEnabled(true);
+
                         }
                     });
                     */
+                } else {
+                    setRelations( currentUser, currentIncicenteMap,"Comentarios" , "incidente:Comentarios:1", savedComentario, true );
+
                 }
                 //dismiss();
             }
@@ -215,13 +224,52 @@ public class ComentariosDialogFragment extends DialogFragment {
         });
     }
 
+    private void NotificarComentario (final String channel ) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PublishOptions publishOptions = new PublishOptions();
+                publishOptions.putHeader( "android-ticker-text", "Se registró un nuevo comentario" );
+                publishOptions.putHeader( "android-content-title", "Se registró un nuevo comentario" );
+                publishOptions.putHeader( "android-content-text", "Se registró un nuevo comentario" );
+
+                DeliveryOptions deliveryOptions = new DeliveryOptions();
+                deliveryOptions.setPushBroadcast( PushBroadcastMask.ANDROID  );
+                //Date publishDate = new Date( System.currentTimeMillis() + 5000 ); // add 5 seconds
+                //deliveryOptions.setPublishAt( publishDate );
+                try{
+                    MessageStatus status = Backendless.Messaging.publish( channel,"Se registró un nuevo comentario",
+                            publishOptions,
+                            deliveryOptions );
+                } catch ( BackendlessException e ) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void registerToChanel() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Backendless.Messaging.registerDevice(Defaults.gcmSenderID, incidenteId, new AsyncCallback<Void>() {
+                    @Override
+                    public void handleResponse(Void response) {
+                        //Toast.makeText(mContext, response.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        //Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
+
     private void publishComent( String textComentario ) {
         HashMap solicitud = new HashMap();
         solicitud.put( "descripcion", textComentario );
         solicitud.put( "fecha", new Date());
-
-        //incidente
-        //usuario
 
         final String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
 

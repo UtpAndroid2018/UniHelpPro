@@ -52,8 +52,8 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".MyPushService"></service>
-        >
+        <service android:name=".MyPushService">
+        </service>
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
@@ -63,7 +63,8 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

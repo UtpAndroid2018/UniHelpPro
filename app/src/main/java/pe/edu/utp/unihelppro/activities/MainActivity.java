@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragment = null;
     boolean doubleBackToExitPressedOnce = false;
     private Handler mHandler;
+    private FloatingActionButton fab;
 
 
     @Override
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         Connect.getInstance().setConnectActivity(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = ReportadosFragment.class;
                 break;
             default:
-                //fragmentClass = ReportadosFragment.class;
                 mDrawer.closeDrawers();
                 return;
         }
@@ -167,6 +167,12 @@ public class MainActivity extends AppCompatActivity {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if( R.id.nav_anadir_incidente == menuItem.getItemId() ) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();

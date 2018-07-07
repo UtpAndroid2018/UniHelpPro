@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import pe.edu.utp.unihelppro.Defaults;
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.Connect;
 import pe.edu.utp.unihelppro.activities.MainActivity;
@@ -138,33 +139,26 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
             }
         });
 
+        return view;
+    }
+
+
+    private void registerToChanel(final String incidenteId ) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                /*
-                PublishOptions publishOptions = new PublishOptions();
-
-                publishOptions.putHeader( "android-ticker-text", "You just got a private push notification!" );
-                publishOptions.putHeader( "android-content-title", "This is a notification title" );
-                publishOptions.putHeader( "android-content-text", "Push Notifications are cool" );
-
-                DeliveryOptions deliveryOptions = new DeliveryOptions();
-                deliveryOptions.setPushBroadcast( PushBroadcastMask.ANDROID  );
-                Date publishDate = new Date( System.currentTimeMillis() + 5000 ); // add 5 seconds
-                deliveryOptions.setPublishAt( publishDate );
-
-                try{
-                    MessageStatus status = Backendless.Messaging.publish( "This message was scheduled 20 sec ago",
-                            publishOptions,
-                            deliveryOptions );
-                } catch ( BackendlessException e ) {
-                    e.printStackTrace();
-                }
-                */
+                Backendless.Messaging.registerDevice(Defaults.gcmSenderID, incidenteId, new AsyncCallback<Void>() {
+                    @Override
+                    public void handleResponse(Void response) {
+                        //Toast.makeText(mContext, response.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        //Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }).start();
-
-        return view;
     }
 
     private void showRecord() {
@@ -357,6 +351,8 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
                             incidente.setUsuarioEmisor( setupUser( currentUser ) );
                             incidente.setupUsers( savedIncidente );
                             incidente.save();
+
+                            registerToChanel( incidente.getObjectId() );
                             MenuItem menuItem = ( (MainActivity) mContext).nvDrawer.getMenu().findItem(R.id.nav_incidentes);
                             ( (MainActivity) mContext).selectDrawerItem(menuItem);
                         }
