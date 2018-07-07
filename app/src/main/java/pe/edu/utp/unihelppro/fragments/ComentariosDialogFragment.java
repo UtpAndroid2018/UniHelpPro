@@ -192,23 +192,10 @@ public class ComentariosDialogFragment extends DialogFragment {
                     updateViewComents();
 
                     Toast.makeText(mContext, "Comentario publicado", Toast.LENGTH_SHORT).show();
+                    NotificarComentario( incidenteId, inputDescripcion.getText().toString() );
                     inputDescripcion.setText("");
                     enviar_comentario.setEnabled(true);
-                    NotificarComentario( incidenteId );
                     registerToChanel();
-                    /*
-                    Backendless.Messaging.getDeviceRegistration(new AsyncCallback<DeviceRegistration>() {
-                        @Override
-                        public void handleResponse(DeviceRegistration response) {
-                            DeviceRegistration devReg = response;
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-
-                        }
-                    });
-                    */
                 } else {
                     setRelations( currentUser, currentIncicenteMap,"Comentarios" , "incidente:Comentarios:1", savedComentario, true );
 
@@ -224,23 +211,26 @@ public class ComentariosDialogFragment extends DialogFragment {
         });
     }
 
-    private void NotificarComentario (final String channel ) {
+    private void NotificarComentario (final String channel, final String comentario ) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 PublishOptions publishOptions = new PublishOptions();
-                publishOptions.putHeader( "android-ticker-text", "Se registró un nuevo comentario" );
+                publishOptions.putHeader( "android-ticker-text", comentario );
                 publishOptions.putHeader( "android-content-title", "Se registró un nuevo comentario" );
-                publishOptions.putHeader( "android-content-text", "Se registró un nuevo comentario" );
-
+                publishOptions.putHeader( "android-content-text", comentario );
+                final String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+                publishOptions.putHeader( "currentUserObjectId", currentUserObjectId );
+                publishOptions.putHeader( "data-currentUserObjectId", currentUserObjectId );
                 DeliveryOptions deliveryOptions = new DeliveryOptions();
                 deliveryOptions.setPushBroadcast( PushBroadcastMask.ANDROID  );
                 //Date publishDate = new Date( System.currentTimeMillis() + 5000 ); // add 5 seconds
                 //deliveryOptions.setPublishAt( publishDate );
                 try{
-                    MessageStatus status = Backendless.Messaging.publish( channel,"Se registró un nuevo comentario",
+                    MessageStatus status = Backendless.Messaging.publish( channel,comentario ,
                             publishOptions,
                             deliveryOptions );
+
                 } catch ( BackendlessException e ) {
                     e.printStackTrace();
                 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.backendless.persistence.local.UserIdStorageFactory;
 import com.backendless.push.BackendlessPushService;
 
 import pe.edu.utp.unihelppro.utils.Navigation;
@@ -29,13 +30,9 @@ public class MyPushService extends BackendlessPushService {
     @Override
     public boolean onMessage( Context context, Intent intent ) {
         String message = intent.getStringExtra( "message" );
-        /*
-        Toast.makeText( context,
-                "Push message received. Message: " + message,
-                Toast.LENGTH_LONG ).show();
-        */
-        //gotoMain(context);
-        return true;
+        String userObjectId = intent.getStringExtra( "currentUserObjectId" );
+        String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+        return !currentUserObjectId.equals(userObjectId);
     }
 
     @Override
