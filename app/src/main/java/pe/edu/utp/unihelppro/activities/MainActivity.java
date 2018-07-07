@@ -96,6 +96,22 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuItem = nvDrawer.getMenu().findItem(R.id.nav_incidentes);
         selectDrawerItem(menuItem);
 
+        // OCULTAR EL MENU DESPEGABLE DE ACUERDO AL ROL
+
+        if(Backendless.UserService.CurrentUser().getProperty("tipo").equals("cliente"))
+        {
+            Menu nav_Menu = nvDrawer.getMenu();
+            nav_Menu.findItem(R.id.nav_usuarios_reportado).setVisible(false);
+
+        }
+        else
+        {
+            Menu nav_Menu = nvDrawer.getMenu();
+            nav_Menu.findItem(R.id.nav_personal_reportado).setVisible(false);
+            nav_Menu.findItem(R.id.nav_preguntas_frecuentes).setVisible(false);
+            nav_Menu.findItem(R.id.nav_incidentes).setVisible(false);
+        }
+
     }
 
     @Override
