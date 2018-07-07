@@ -4,6 +4,8 @@ import com.backendless.BackendlessUser;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -12,6 +14,13 @@ import java.util.Map;
 public class Incidentes extends SugarRecord implements Serializable {
     @Unique
     private String objectId = "";
+
+    public Incidentes() {
+    }
+
+    public Incidentes(String objectId) {
+        this.objectId = objectId;
+    }
 
     public String getObjectId() {
         return objectId;
@@ -43,7 +52,7 @@ public class Incidentes extends SugarRecord implements Serializable {
                     ue.setCodigo( ( ( BackendlessUser ) map.get( key ) ).getProperty("codigo").toString() );
                 }
             }
-            ue.setupUser();
+            ue.setupUser( null );
         }
         UsuarioBackendless ur = getUsuarioReceptor();
         if ( ur != null ) {
@@ -58,7 +67,7 @@ public class Incidentes extends SugarRecord implements Serializable {
                     ur.setCodigo( ( ( BackendlessUser ) map.get( key ) ).getProperty("codigo").toString() );
                 }
             }
-            ur.setupUser();
+            ur.setupUser( null );
         }
     }
 
@@ -163,4 +172,10 @@ public class Incidentes extends SugarRecord implements Serializable {
         this.pabellon = pabellon;
     }
 
+    public void getData() {
+        Incidentes _real = Select.from(Incidentes.class).where(Condition.prop("OBJECT_ID").eq(getObjectId())).first();
+        if( _real != null ) {
+            setId( _real.getId() );
+        }
+    }
 }

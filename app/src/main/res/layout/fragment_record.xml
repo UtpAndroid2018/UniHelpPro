@@ -2,14 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     tools:context="pe.edu.utp.unihelppro.fragments.RecordFragment">
 
     <pe.edu.utp.unihelppro.recording.VoiceView
         android:id="@+id/voiceview"
-        android:background="@android:color/transparent"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_centerInParent="true"
         />
 </RelativeLayout>

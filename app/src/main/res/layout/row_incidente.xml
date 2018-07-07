@@ -11,7 +11,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
             android:id="@+id/header_incidente"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -80,7 +79,6 @@
             android:layout_height="wrap_content">
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
@@ -101,9 +99,9 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="wrap_content" >
                 <Button
+                    android:clickable="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     style="?android:attr/buttonBarStyle"
                     android:textColor="@color/colorSecondaryText"
@@ -112,8 +110,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_favorite_black"
-                    android:text="@string/me_gustas" />
-
+                    android:text="@string/me_gustas"
+                    android:focusable="true" />
                 <Button
                     style="?android:attr/buttonBarStyle"
                     android:textColor="@color/colorSecondaryText"
@@ -123,18 +121,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_mode_comment_black"
                     android:text="@string/comentar" />
-
             </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/linear_comentarios_incidente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_comentarios_incidente"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

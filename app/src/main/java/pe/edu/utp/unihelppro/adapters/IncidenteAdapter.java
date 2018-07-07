@@ -2,11 +2,13 @@ package pe.edu.utp.unihelppro.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import pe.edu.utp.unihelppro.Connect;
 import pe.edu.utp.unihelppro.R;
+import pe.edu.utp.unihelppro.activities.MainActivity;
+import pe.edu.utp.unihelppro.fragments.ComentariosDialogFragment;
+import pe.edu.utp.unihelppro.fragments.IncidenteFragment;
 import pe.edu.utp.unihelppro.models.Comentarios;
 import pe.edu.utp.unihelppro.models.Incidentes;
 
@@ -39,10 +45,12 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
     private List<Incidentes> incidentes;
     private final Context mContext;
     private int _position = -1;
+    private static FragmentManager fragmentManager;
 
     public IncidenteAdapter(List<Incidentes> incidentesList, Context mContext) {
         this.incidentes = incidentesList;
         this.mContext = mContext;
+        this.fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
     }
     public void updateData(List<Incidentes> _incidentes) {
         incidentes.clear();
@@ -72,8 +80,13 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         private TextView incidenteFecha;
         private TextView incidenteContenido;
         private ImageView incidenteImagen;
+<<<<<<< HEAD
         private ImageView incidenteEditar;
         private RecyclerView recycler_comentarios_incidente;
+=======
+        private Button btnMeGusta;
+        private Button btnComentar;
+>>>>>>> c1a0a88287658a410db014cdcdec1dccdc84b6f7
         ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -81,17 +94,27 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
             incidenteFecha = (TextView) itemView.findViewById(R.id.incidenteFecha);
             incidenteContenido = (TextView) itemView.findViewById(R.id.incidenteContenido);
             incidenteImagen = (ImageView) itemView.findViewById(R.id.incidenteImagen);
+<<<<<<< HEAD
             incidenteEditar = (ImageView) itemView.findViewById(R.id.incidenteEditar);
             recycler_comentarios_incidente = (RecyclerView) itemView.findViewById(R.id.recycler_comentarios_incidente);
+=======
+            btnMeGusta = (Button) itemView.findViewById(R.id.btnMeGusta);
+            btnComentar = (Button) itemView.findViewById(R.id.btnComentar);
+>>>>>>> c1a0a88287658a410db014cdcdec1dccdc84b6f7
 
             //dividerProject= (ImageView) itemView.findViewById(R.id.dividerProject);
         }
     }
 
+    private void openComentarios ( String incidenteID ) {
+        ComentariosDialogFragment comentariosDialogFragment = ComentariosDialogFragment.newInstance( incidenteID );
+        comentariosDialogFragment.show( fragmentManager, "dialog" );
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int pt) {
         final int position = holder.getAdapterPosition();
-        Incidentes inc = incidentes.get(position);
+        final Incidentes inc = incidentes.get(position);
         if( inc.getUsuarioEmisor() != null ) {
             holder.incidenteNombreUsuario.setText(inc.getUsuarioEmisor().getName());
         }
@@ -109,6 +132,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         } else {
             holder.incidenteImagen.setVisibility(View.GONE);
         }
+<<<<<<< HEAD
         String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
         if( !inc.getUsuarioEmisor().getObjectId().equals( currentUserObjectId )  ) {
             holder.incidenteEditar.setVisibility(View.GONE);
@@ -146,11 +170,14 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 ComentarioAdapter incidentesAdapter = new ComentarioAdapter(comentariosList, mContext );
                 holder.recycler_comentarios_incidente.setAdapter(incidentesAdapter);
             }
+=======
+
+        holder.btnComentar.setOnClickListener(new View.OnClickListener() {
+>>>>>>> c1a0a88287658a410db014cdcdec1dccdc84b6f7
             @Override
-            public void handleFault( BackendlessFault fault ) {
-                Toast.makeText(getContext(), fault.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                openComentarios( inc.getObjectId() );
             }
-        } );
-        */
+        });
     }
 }

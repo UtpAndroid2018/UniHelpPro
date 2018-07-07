@@ -109,8 +109,6 @@ public class Connect extends MultiDexApplication  {
         Logger.getInstance().setExternalLogger(new ILoggerCallback() {
             @Override
             public void log(String tag, Logger.LogLevel logLevel, String message, boolean containsPII) {
-                // contains PII indicates that if the log message contains PII information. If Pii logging is
-                // disabled, the sdk never returns back logs with Pii.
                 mLogs.append(message).append('\n');
             }
         });

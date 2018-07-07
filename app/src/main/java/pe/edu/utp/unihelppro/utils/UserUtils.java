@@ -13,6 +13,7 @@ import com.backendless.messaging.MessageStatus;
 import pe.edu.utp.unihelppro.Defaults;
 import pe.edu.utp.unihelppro.authentication.AuthenticationManager;
 import pe.edu.utp.unihelppro.authentication.Constants;
+import pe.edu.utp.unihelppro.models.UsuarioBackendless;
 
 public class UserUtils {
     public static void isValidLogin(final Context mContext, final AsyncCallback<Boolean> listener ) {
@@ -45,6 +46,9 @@ public class UserUtils {
     public static void register(BackendlessUser user, final AsyncCallback<BackendlessUser> listener ) {
         Backendless.UserService.register( user, new AsyncCallback<BackendlessUser>() {
             public void handleResponse( BackendlessUser registeredUser ) {
+                UsuarioBackendless ub = new UsuarioBackendless( registeredUser.getObjectId()  );
+                ub.setupUser( registeredUser );
+                //ub.save();
                 Backendless.Messaging.registerDevice(Defaults.gcmSenderID, "default", new AsyncCallback<Void>() {
                     @Override
                     public void handleResponse(Void response) {
@@ -68,6 +72,8 @@ public class UserUtils {
     public static void login(final BackendlessUser user, final AsyncCallback<BackendlessUser> listener ) {
         Backendless.UserService.login(user.getEmail(), user.getPassword(), new AsyncCallback<BackendlessUser>() {
             public void handleResponse(final BackendlessUser user) {
+                UsuarioBackendless ub = new UsuarioBackendless( user.getObjectId()  );
+                ub.setupUser( user );
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

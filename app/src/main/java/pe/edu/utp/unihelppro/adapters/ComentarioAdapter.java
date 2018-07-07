@@ -83,15 +83,18 @@ public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.Vi
     public void onBindViewHolder(final ViewHolder holder, final int pt) {
         final int position = holder.getAdapterPosition();
 
-        holder.comentarioNombreUsuario.setText(comentarios.get(position).getUsuario().getProperties().getName());
-        //holder.comentarioFecha.setText(comentarios.get(position).getFecha());
+        Comentarios comentario = comentarios.get(position);
 
-        holder.comentarioFecha.setText(comentarios.get(position).getTimeAgo());
-
-        holder.comentarioContenido.setText(comentarios.get(position).getDescripcion());
-
-        if ( position == this.comentarios.size() - 1 ){
-            //holder.dividerProject.setVisibility(View.GONE);
+        if( comentario.getUsuario() != null ) {
+            if( comentario.getUsuario().getProperties() != null ) {
+                holder.comentarioNombreUsuario.setText(comentario.getUsuario().getProperties().getName());
+            }
         }
+        //holder.comentarioFecha.setText(comentario.getFecha());
+
+        holder.comentarioFecha.setText(comentario.getTimeAgo());
+
+        holder.comentarioContenido.setText(comentario.getDescripcion());
+
     }
 }

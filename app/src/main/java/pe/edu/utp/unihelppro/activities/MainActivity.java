@@ -17,7 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.persistence.local.UserIdStorageFactory;
+
+import org.w3c.dom.Text;
 
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.Connect;
@@ -28,6 +34,7 @@ import pe.edu.utp.unihelppro.fragments.CrearSolicitudFragment;
 import pe.edu.utp.unihelppro.fragments.IncidentesFragment;
 import pe.edu.utp.unihelppro.fragments.PreguntasFragment;
 import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
+import pe.edu.utp.unihelppro.models.UsuarioBackendless;
 import pe.edu.utp.unihelppro.utils.Navigation;
 import pe.edu.utp.unihelppro.utils.UserUtils;
 
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragment = null;
     boolean doubleBackToExitPressedOnce = false;
     private Handler mHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,19 @@ public class MainActivity extends AppCompatActivity {
         //toggle.syncState();
 
         nvDrawer = (NavigationView) findViewById(R.id.nav_view);
+
+        // Agregando el usuario actual al header
+        View hView = nvDrawer.getHeaderView(0);
+        TextView tvCurrentUser = (TextView) hView.findViewById(R.id.tvCurrentUser);
+        TextView textView = (TextView) hView.findViewById(R.id.textView);
+
+        final String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+        UsuarioBackendless ub = new UsuarioBackendless( currentUserObjectId );
+        ub.setupUser( null );
+        tvCurrentUser.setText( ub.getName() );
+        textView.setText( ub.getEmail() );
+
+
         //nvDrawer.setNavigationItemSelectedListener(this);
         setupDrawerContent(nvDrawer);
 
