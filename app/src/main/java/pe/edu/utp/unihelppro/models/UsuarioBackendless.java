@@ -95,13 +95,16 @@ public class UsuarioBackendless extends SugarRecord implements Serializable {
         //uBackendless.setUserStatus( getProperty("userStatus").toString() );
         //uBackendless.setTipo( getProperty("tipo").toString() );
         //uBackendless.setCodigo( getProperty("codigo").toString() );
-        if( getName().equals("") || getCodigo().equals("") || getTipo().equals("") || getUserStatus().equals("") ) {
+        if( getEmail().equals("") || getName().equals("") || getCodigo().equals("") || getTipo().equals("") || getUserStatus().equals("") ) {
             if( registeredUser != null ) {
                 if( !registeredUser.getProperty("name").toString().equals("") ) {
                     setName( registeredUser.getProperty("name").toString() );
                 }
                 if( !registeredUser.getProperty("codigo").toString().equals("") ) {
                     setCodigo( registeredUser.getProperty("codigo").toString() );
+                }
+                if( !registeredUser.getProperty("email").toString().equals("") ) {
+                    setEmail( registeredUser.getProperty("email").toString() );
                 }
                 if( !registeredUser.getProperty("tipo").toString().equals("") ) {
                     setTipo( registeredUser.getProperty("tipo").toString() );
@@ -118,6 +121,9 @@ public class UsuarioBackendless extends SugarRecord implements Serializable {
                     }
                     if( getCodigo().equals("") ) {
                         setCodigo( _real.getCodigo() );
+                    }
+                    if( getEmail().equals("") ) {
+                        setEmail( _real.getEmail() );
                     }
                     if( getTipo().equals("") ) {
                         setTipo( _real.getTipo() );

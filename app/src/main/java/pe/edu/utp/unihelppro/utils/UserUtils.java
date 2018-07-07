@@ -72,6 +72,8 @@ public class UserUtils {
     public static void login(final BackendlessUser user, final AsyncCallback<BackendlessUser> listener ) {
         Backendless.UserService.login(user.getEmail(), user.getPassword(), new AsyncCallback<BackendlessUser>() {
             public void handleResponse(final BackendlessUser user) {
+                UsuarioBackendless ub = new UsuarioBackendless( user.getObjectId()  );
+                ub.setupUser( user );
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

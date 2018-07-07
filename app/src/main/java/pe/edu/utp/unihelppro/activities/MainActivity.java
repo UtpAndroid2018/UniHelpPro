@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.persistence.local.UserIdStorageFactory;
 
 import org.w3c.dom.Text;
 
@@ -33,6 +34,7 @@ import pe.edu.utp.unihelppro.fragments.CrearSolicitudFragment;
 import pe.edu.utp.unihelppro.fragments.IncidentesFragment;
 import pe.edu.utp.unihelppro.fragments.PreguntasFragment;
 import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
+import pe.edu.utp.unihelppro.models.UsuarioBackendless;
 import pe.edu.utp.unihelppro.utils.Navigation;
 import pe.edu.utp.unihelppro.utils.UserUtils;
 
@@ -54,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         mContext = this;
 
@@ -80,7 +80,13 @@ public class MainActivity extends AppCompatActivity {
         // Agregando el usuario actual al header
         View hView = nvDrawer.getHeaderView(0);
         TextView tvCurrentUser = (TextView) hView.findViewById(R.id.tvCurrentUser);
-        tvCurrentUser.setText(Backendless.UserService.CurrentUser().getEmail().toString());
+        TextView textView = (TextView) hView.findViewById(R.id.textView);
+
+        final String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+        UsuarioBackendless ub = new UsuarioBackendless( currentUserObjectId );
+        ub.setupUser( null );
+        tvCurrentUser.setText( ub.getName() );
+        textView.setText( ub.getEmail() );
 
 
         //nvDrawer.setNavigationItemSelectedListener(this);

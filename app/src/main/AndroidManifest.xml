@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="DATABASE"
-            android:value="unihelppro23.db" />
+            android:value="unihelppro25.db" />
         <meta-data
             android:name="VERSION"
             android:value="2" />
