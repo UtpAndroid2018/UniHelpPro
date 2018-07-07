@@ -16,6 +16,7 @@ import com.backendless.IDataStore;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.backendless.persistence.local.UserIdStorageFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages;
@@ -71,6 +72,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         private TextView incidenteFecha;
         private TextView incidenteContenido;
         private ImageView incidenteImagen;
+        private ImageView incidenteEditar;
         private RecyclerView recycler_comentarios_incidente;
         ViewHolder(View itemView) {
             super(itemView);
@@ -79,6 +81,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
             incidenteFecha = (TextView) itemView.findViewById(R.id.incidenteFecha);
             incidenteContenido = (TextView) itemView.findViewById(R.id.incidenteContenido);
             incidenteImagen = (ImageView) itemView.findViewById(R.id.incidenteImagen);
+            incidenteEditar = (ImageView) itemView.findViewById(R.id.incidenteEditar);
             recycler_comentarios_incidente = (RecyclerView) itemView.findViewById(R.id.recycler_comentarios_incidente);
 
             //dividerProject= (ImageView) itemView.findViewById(R.id.dividerProject);
@@ -106,6 +109,11 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         } else {
             holder.incidenteImagen.setVisibility(View.GONE);
         }
+        String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+        if( !inc.getUsuarioEmisor().getObjectId().equals( currentUserObjectId )  ) {
+            holder.incidenteEditar.setVisibility(View.GONE);
+        }
+
         /*
         IDataStore<Map> incidentesStorage = Backendless.Data.of( "Comentarios" );
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
