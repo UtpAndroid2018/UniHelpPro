@@ -17,7 +17,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.backendless.Backendless;
+
+import org.w3c.dom.Text;
 
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.Connect;
@@ -42,12 +47,15 @@ public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     private Handler mHandler;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         mContext = this;
 
@@ -68,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
         //toggle.syncState();
 
         nvDrawer = (NavigationView) findViewById(R.id.nav_view);
+
+        // Agregando el usuario actual al header
+        View hView = nvDrawer.getHeaderView(0);
+        TextView tvCurrentUser = (TextView) hView.findViewById(R.id.tvCurrentUser);
+        tvCurrentUser.setText(Backendless.UserService.CurrentUser().getEmail().toString());
+
+
         //nvDrawer.setNavigationItemSelectedListener(this);
         setupDrawerContent(nvDrawer);
 
