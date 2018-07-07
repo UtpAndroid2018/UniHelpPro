@@ -87,6 +87,8 @@
     <string name="estadisticas">Estadísticas</string>
     <string name="title_activity_estadisticas">EstadisticasActivity</string>
     <string name="reportes">Reportes</string>
+    <string name="comentario">Comentario</string>
+    <string name="escribe_comentario">Escribe un comentario</string>
 
 
     <string-array name="categoriaList">
