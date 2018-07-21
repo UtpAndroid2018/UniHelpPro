@@ -1,5 +1,6 @@
 package pe.edu.utp.unihelppro.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import com.backendless.persistence.local.UserIdStorageFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -58,6 +60,7 @@ import pe.edu.utp.unihelppro.Defaults;
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.Connect;
 import pe.edu.utp.unihelppro.activities.MainActivity;
+import pe.edu.utp.unihelppro.models.Calificaciones;
 import pe.edu.utp.unihelppro.models.Incidentes;
 import pe.edu.utp.unihelppro.models.UsuarioBackendless;
 
@@ -87,6 +90,7 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
     private String currentPathImage = "";
     private String currentPathAudio = "";
     private Bitmap currentBMImage;
+    private ProgressDialog progressDialog;
 
     public CrearSolicitudFragment() {
 
@@ -178,7 +182,8 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
                     }
                     @Override
                     public void handleFault( BackendlessFault backendlessFault ) {
-                        Toast.makeText( Connect.getInstance(), backendlessFault.toString(), Toast.LENGTH_SHORT ).show();
+                        dismmisProgreesLoading();
+                        Toast.makeText( Connect.getInstance(), "Ocurrió un error al subir el audio", Toast.LENGTH_SHORT ).show();
                     }
                 }
         );
@@ -202,12 +207,19 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
 
                     @Override
                     public void handleFault( BackendlessFault backendlessFault ) {
-                        Toast.makeText( Connect.getInstance(), backendlessFault.toString(), Toast.LENGTH_SHORT ).show();
+                        dismmisProgreesLoading();
+                        Toast.makeText( Connect.getInstance(), "Ocurrió un error al subir la foto", Toast.LENGTH_SHORT ).show();
                     }
                 }
         );
     }
     private void uploadAllMedia() {
+        if( inputDescripcion.getText().toString().equals("") ){
+            Toast.makeText(mContext, "Debes ingresar una descripción", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        loadProgreesUploadLoading();
         if( !currentPathImage.equals("") || currentBMImage != null ) {
             uploadPhoto();
         } else {
@@ -334,6 +346,17 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
         return ub;
     }
 
+
+    private void dismmisProgreesLoading() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
+    private void loadProgreesUploadLoading() {
+        progressDialog = ProgressDialog.show(mContext, null, mContext.getResources().getString(R.string.registrando_incidente), true);
+        progressDialog.setCancelable(false);
+    }
+
     public void registrarIncidente( BackendlessFile photoFile, BackendlessFile audioFile ) {
         HashMap solicitud = new HashMap();
         solicitud.put( "descripcion", inputDescripcion.getText().toString() );
@@ -362,73 +385,61 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
 
         Backendless.Persistence.of( "Incidentes" ).save( solicitud, new AsyncCallback<Map>() {
             public void handleResponse(final Map savedIncidente ) {
-                ObjectMapper mapper = new ObjectMapper();
                 final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-                final Incidentes incidente = mapper.convertValue(savedIncidente, Incidentes.class);
+                Gson gson = new Gson();
+                String json = gson.toJson( savedIncidente );
+                final Incidentes incidente = gson.fromJson(json, Incidentes.class);
+                incidente.save();
 
                 if ( currentUser != null ) {
-                    Map savedAddress2 = currentUser.getProperties();
-                    IDataStore<Map> contactStorage = Backendless.Data.of( "Incidentes" );
-
-                    List<Map> addresses = new ArrayList<Map>();
-                    addresses.add( savedAddress2 );
-                    contactStorage.setRelation(savedIncidente, "usuarioEmisor:Incidentes:1", addresses, new AsyncCallback<Integer>() {
-                        @Override
-                        public void handleResponse(Integer response) {
-                            Toast.makeText(mContext, "Registrado", Toast.LENGTH_SHORT).show();
-                            incidente.setUsuarioEmisor( setupUser( currentUser ) );
-                            incidente.setupUsers( savedIncidente );
-                            incidente.save();
-
-                            registerToChanel( incidente.getObjectId() );
-                            MenuItem menuItem = ( (MainActivity) mContext).nvDrawer.getMenu().findItem(R.id.nav_incidentes);
-                            ( (MainActivity) mContext).selectDrawerItem(menuItem);
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    Map userMap = currentUser.getProperties();
+                    setRelations( currentUser, userMap,"Incidentes" , "usuarioEmisor:Incidentes:1", savedIncidente, incidente );
                 } else {
 
                     Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser>() {
                         @Override
                         public void handleResponse(final BackendlessUser response) {
-
-                            Map savedAddress2 = response.getProperties();
-                            IDataStore<Map> contactStorage = Backendless.Data.of( "Incidentes" );
-
-                            List<Map> addresses = new ArrayList<Map>();
-                            addresses.add( savedAddress2 );
-                            contactStorage.setRelation(savedIncidente, "usuarioEmisor:Incidentes:1", addresses, new AsyncCallback<Integer>() {
-                                @Override
-                                public void handleResponse(Integer responseRelation) {
-                                    Toast.makeText(mContext, "Registrado", Toast.LENGTH_SHORT).show();
-                                    incidente.setUsuarioEmisor( setupUser( response ) );
-                                    incidente.setupUsers( savedIncidente );
-                                    incidente.save();
-                                    MenuItem menuItem = ( (MainActivity) mContext).nvDrawer.getMenu().findItem(R.id.nav_incidentes);
-                                    ( (MainActivity) mContext).selectDrawerItem(menuItem);
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            Map userMap = response.getProperties();
+                            setRelations( currentUser, userMap,"Incidentes" , "usuarioEmisor:Incidentes:1", savedIncidente, incidente );
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            dismmisProgreesLoading();
+                            Toast.makeText(mContext, "Ocurrió un error al registrar el inicidente", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
 
             public void handleFault( BackendlessFault fault ) {
-                Toast.makeText(mContext, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                dismmisProgreesLoading();
+                Toast.makeText(mContext, "Ocurrió un error al registrar el inicidente", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setRelations(final BackendlessUser currentUser, final Map mapData, final String tablaName, String relation, final Map savedIncidente, final Incidentes incidente) {
+        IDataStore<Map> contactStorage = Backendless.Data.of( tablaName );
+        List<Map> addresses = new ArrayList<Map>();
+        addresses.add( mapData );
+        contactStorage.setRelation(savedIncidente, relation, addresses, new AsyncCallback<Integer>() {
+            @Override
+            public void handleResponse(Integer response) {
+                incidente.setUsuarioEmisor( setupUser( currentUser ) );
+                incidente.setupUsers( savedIncidente );
+                incidente.save();
+                Toast.makeText(mContext, "Registrado", Toast.LENGTH_SHORT).show();
+                dismmisProgreesLoading();
+                registerToChanel( incidente.getObjectId() );
+                MenuItem menuItem = ( (MainActivity) mContext).nvDrawer.getMenu().findItem(R.id.nav_incidentes);
+                ( (MainActivity) mContext).selectDrawerItem(menuItem);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                dismmisProgreesLoading();
+                Toast.makeText(mContext, "Ocurrió un error al registrar el inicidente", Toast.LENGTH_SHORT).show();
             }
         });
     }

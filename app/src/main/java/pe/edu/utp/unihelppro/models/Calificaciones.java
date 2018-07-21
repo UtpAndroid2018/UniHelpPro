@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 
-public class CalificarIncidente extends SugarRecord implements Serializable {
+public class Calificaciones extends SugarRecord implements Serializable {
     @Unique
     private String objectId;
     private String descripcion = "";

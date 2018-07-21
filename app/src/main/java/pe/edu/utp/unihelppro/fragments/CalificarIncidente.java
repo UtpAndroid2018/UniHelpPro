@@ -14,6 +14,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import pe.edu.utp.unihelppro.R;
+import pe.edu.utp.unihelppro.models.Calificaciones;
 import pe.edu.utp.unihelppro.models.Reportados;
 
 
@@ -61,7 +62,7 @@ public class CalificarIncidente extends DialogFragment {
             return;
         }
         if (mListener != null) {
-            Reportados reporte = new Reportados();
+            Calificaciones reporte = new Calificaciones();
             reporte.setDescripcion( comentario_edittext.getText().toString() );
             reporte.setCalificacion( rbPuntuacion.getRating() );
             mListener.onCalificar( reporte );
@@ -94,6 +95,6 @@ public class CalificarIncidente extends DialogFragment {
     }
 
     public interface OnCalificarListener {
-        void onCalificar(Reportados reporte);
+        void onCalificar(Calificaciones calificar);
     }
 }

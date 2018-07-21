@@ -45,6 +45,7 @@ import pe.edu.utp.unihelppro.fragments.CalificarIncidente;
 import pe.edu.utp.unihelppro.fragments.ComentariosDialogFragment;
 import pe.edu.utp.unihelppro.fragments.IncidenteFragment;
 import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
+import pe.edu.utp.unihelppro.models.Calificaciones;
 import pe.edu.utp.unihelppro.models.Comentarios;
 import pe.edu.utp.unihelppro.models.Incidentes;
 import pe.edu.utp.unihelppro.models.Reportados;
@@ -53,7 +54,7 @@ import pe.edu.utp.unihelppro.models.UsuarioProperties;
 
 import static pe.edu.utp.unihelppro.Connect.getContext;
 
-public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener, ReportarIncidente.OnReportarListener {
+public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.ViewHolder> implements CalificarIncidente.OnCalificarListener, PopupMenu.OnMenuItemClickListener, ReportarIncidente.OnReportarListener {
     private List<Incidentes> incidentes;
     private final Context mContext;
     private int _position = -1;
@@ -94,34 +95,44 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         return usuarioProperties;
     }
 
-    private void setRelations(final BackendlessUser currentUser, final Map mapData, String tablaName, String relation, final Map mapSavedReporte, final Reportados savedReporte, final boolean _final ) {
+    private void setRelations(final BackendlessUser currentUser, final Map mapData, final String tablaName, String relation, final Map mapSaved, final Reportados savedReporte, final Calificaciones savedCalifica, final boolean _final, final int idView ) {
         IDataStore<Map> contactStorage = Backendless.Data.of( tablaName );
         List<Map> addresses = new ArrayList<Map>();
         addresses.add( mapData );
-        contactStorage.setRelation(mapSavedReporte, relation, addresses, new AsyncCallback<Integer>() {
+        contactStorage.setRelation(mapSaved, relation, addresses, new AsyncCallback<Integer>() {
             @Override
             public void handleResponse(Integer response) {
                 Gson gson = new Gson();
                 if( _final ) {
                     Incidentes incidente = new Incidentes( inc.getObjectId() );
                     incidente.getData();
-                    savedReporte.setIncidente( incidente );
-                    savedReporte.setUsuarioEmisor( setupUserMap( currentUser ) );
-                    savedReporte.save();
-                    //comentariosList.add( 0, comentario );
-                    dismmisProgreesLoading();
-                    Toast.makeText(mContext, "Incidente reportado", Toast.LENGTH_SHORT).show();
+                    switch ( idView ){
+                        case R.id.action_calificar:
+                            savedCalifica.setIncidente( incidente );
+                            savedCalifica.setUsuarioEmisor( setupUserMap( currentUser ) );
+                            savedCalifica.save();
+                            dismmisProgreesLoading();
+                            Toast.makeText(mContext, "Incidente calificado", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.action_reportar:
+                            savedReporte.setIncidente( incidente );
+                            savedReporte.setUsuarioEmisor( setupUserMap( currentUser ) );
+                            savedReporte.save();
+                            dismmisProgreesLoading();
+                            Toast.makeText(mContext, "Incidente reportado", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
                 } else {
                     Map<String, String> solicitud = new HashMap<>();
                     solicitud.put( "objectId", inc.getObjectId() );
-                    setRelations( currentUser, solicitud,"UsuariosReportados" , "incidente:UsuariosReportados:1", mapSavedReporte, savedReporte, true );
+                    setRelations( currentUser, solicitud,tablaName , "incidente:"+ tablaName +":1", mapSaved, savedReporte,savedCalifica, true, idView );
                 }
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 dismmisProgreesLoading();
-                Toast.makeText(mContext, "Ocurrió un error al reportar el inicidente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Ocurrió un error al registrar la acción", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -138,7 +149,6 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
 
         Backendless.Persistence.of( "UsuariosReportados" ).save( solicitud, new AsyncCallback<Map>() {
             public void handleResponse(final Map savedReporte ) {
-                ObjectMapper mapper = new ObjectMapper();
                 final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
                 Gson gson = new Gson();
                 String json = gson.toJson( savedReporte );
@@ -146,18 +156,19 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 reportado.save();
                 if ( currentUser != null ) {
                     Map userMap = currentUser.getProperties();
-                    setRelations( currentUser, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, false );
+                    setRelations( currentUser, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, null, false, R.id.action_reportar );
                 } else {
                     Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser>() {
                         @Override
                         public void handleResponse(final BackendlessUser response) {
                             Map userMap = response.getProperties();
-                            setRelations( response, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, false );
+                            setRelations( response, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, null, false, R.id.action_reportar );
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(mContext, "Ocurrió un error al publicar el comentario", Toast.LENGTH_SHORT).show();
+                            dismmisProgreesLoading();
+                            Toast.makeText(mContext, "Ocurrió un error al reportar el inicidente", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -178,6 +189,48 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
     private void loadProgreesUploadLoading() {
         progressDialog = ProgressDialog.show(mContext, null, mContext.getResources().getString(R.string.reportando_incidente), true);
         progressDialog.setCancelable(false);
+    }
+
+    @Override
+    public void onCalificar(Calificaciones calificar) {
+        loadProgreesUploadLoading();
+        progressDialog.setMessage( mContext.getResources().getString(R.string.calificando_incidente ) );
+        HashMap solicitud = new HashMap();
+        solicitud.put( "calificacion", calificar.getCalificacion() );
+        solicitud.put( "descripcion", calificar.getDescripcion() );
+        solicitud.put( "fecha", new Date());
+        final String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+        Backendless.Persistence.of( "Calificaciones" ).save( solicitud, new AsyncCallback<Map>() {
+            public void handleResponse(final Map savedCalifica ) {
+                final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+                Gson gson = new Gson();
+                String json = gson.toJson( savedCalifica );
+                final Calificaciones calificado = gson.fromJson(json, Calificaciones.class);
+                calificado.save();
+                if ( currentUser != null ) {
+                    Map userMap = currentUser.getProperties();
+                    setRelations( currentUser, userMap,"Calificaciones" , "usuarioEmisor:Calificaciones:1", savedCalifica, null, calificado, false, R.id.action_calificar );
+                } else {
+                    Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(final BackendlessUser response) {
+                            Map userMap = response.getProperties();
+                            setRelations( response, userMap,"Calificaciones" , "usuarioEmisor:Calificaciones:1", savedCalifica, null, calificado, false, R.id.action_calificar );
+                        }
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            dismmisProgreesLoading();
+                            Toast.makeText(mContext, "Ocurrió un error al calificar el incidente", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            public void handleFault( BackendlessFault fault ) {
+                dismmisProgreesLoading();
+                Toast.makeText(mContext, "Ocurrió un error al calificar el incidente", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -230,6 +283,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 return true;
             case R.id.action_calificar:
                 CalificarIncidente calificarIncidente = CalificarIncidente.newInstance();
+                calificarIncidente.setmListener( this );
                 calificarIncidente.show( fragmentManager , "dialog" );
                 return true;
             case R.id.action_reportar:
@@ -262,14 +316,14 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         if( inc.getUsuarioEmisor() != null ) {
             holder.incidenteNombreUsuario.setText(inc.getUsuarioEmisor().getName());
         }
-
-
         Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
         TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
         String fecha = TimeAgo.using(Long.parseLong(inc.getFecha()), messages);
         holder.incidenteFecha.setText(fecha);
         if( !inc.getDescripcion().equals("") ) {
             holder.incidenteContenido.setText(inc.getDescripcion());
+        } else {
+            holder.incidenteContenido.setVisibility(View.GONE);
         }
         if ( inc.getFoto() != null && !inc.getFoto().equals("") ) {
             Picasso.with(mContext).load( inc.getFoto() ).into( holder.incidenteImagen );
@@ -280,9 +334,6 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         if( !inc.getUsuarioEmisor().getObjectId().equals( currentUserObjectId )  ) {
             holder.incidenteEditar.setVisibility(View.GONE);
         }
-
-
-
         holder.btnComentar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
