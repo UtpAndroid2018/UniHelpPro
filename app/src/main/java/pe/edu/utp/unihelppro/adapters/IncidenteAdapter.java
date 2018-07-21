@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,9 @@ import com.github.marlonlom.utilities.timeago.TimeAgoMessages;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -249,6 +253,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         private TextView incidenteFecha;
         private TextView incidenteContenido;
         private ImageView incidenteImagen;
+        private LinearLayout linear_reproducir;
         private ImageView incidenteEditar;
         private ImageView incidenteBoton;
 
@@ -257,6 +262,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
+            linear_reproducir = (LinearLayout) itemView.findViewById(R.id.linear_reproducir);
             incidenteComentarios = (TextView) itemView.findViewById(R.id.incidenteComentarios);
             incidenteMeGustas = (TextView) itemView.findViewById(R.id.incidenteMeGustas);
             incidenteNombreUsuario = (TextView) itemView.findViewById(R.id.incidenteNombreUsuario);
@@ -390,11 +396,24 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
             holder.incidenteNombreUsuario.setText(inc.getUsuarioEmisor().getName());
         }
         if( inc.getFecha() != null && !inc.getFecha().equals("") ){
-            Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
+            Locale LocaleBylanguageTag = Locale.forLanguageTag("en");
             TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
-            long longDate = Long.parseLong(inc.getFecha() );
-            String fecha = TimeAgo.using(Long.parseLong(inc.getFecha()), messages);
-            holder.incidenteFecha.setText(fecha);
+
+            DateFormat dfDateFull = DateFormat.getDateInstance(DateFormat.FULL);
+
+            holder.incidenteFecha.setText(inc.getFecha());
+            /*
+            try {
+                dfDateFull.parse( inc.getFecha() );
+                String fecha = TimeAgo.using(dfDateFull.getCalendar().getTimeInMillis() , messages);
+                holder.incidenteFecha.setText(fecha);
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+            */
+            //long longDate = Long.parseLong(inc.getFecha() );
+            //String fecha = TimeAgo.using(Long.parseLong(inc.getFecha()), messages);
+            //holder.incidenteFecha.setText(fecha);
         }
         if( !inc.getDescripcion().equals("") ) {
             holder.incidenteContenido.setText(inc.getDescripcion());
@@ -405,6 +424,11 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
             Picasso.with(mContext).load( inc.getFoto() ).into( holder.incidenteImagen );
         } else {
             holder.incidenteImagen.setVisibility(View.GONE);
+        }
+        if ( inc.getAudio() != null && !inc.getAudio().equals("") ) {
+            holder.linear_reproducir.setVisibility(View.VISIBLE);
+        } else {
+            holder.linear_reproducir.setVisibility(View.GONE);
         }
         holder.incidenteMeGustas.setText(  inc.getMegustas() + " me gustas" );
         holder.incidenteComentarios.setText(  inc.getComentarios() + " comentarios" );

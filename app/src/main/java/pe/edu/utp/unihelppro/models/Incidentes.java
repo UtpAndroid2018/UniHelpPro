@@ -62,6 +62,8 @@ public class Incidentes extends SugarRecord implements Serializable {
             ue.setEmail( getUsuarioEmisor().getEmail() );
             for ( Object key : map.keySet() ) {
                 if( key.equals("usuarioEmisor" ) ) {
+                    ue.setObjectId( ( (BackendlessUser) map.get( key ) ).getProperty("objectId").toString() );
+                    ue.setEmail( ( (BackendlessUser) map.get( key ) ).getProperty("email").toString() );
                     ue.setName( ( (BackendlessUser) map.get( key ) ).getProperty("name").toString() );
                     ue.setSocialAccount( ( ( BackendlessUser ) map.get( key ) ).getProperty("socialAccount").toString() );
                     ue.setUserStatus( ( ( BackendlessUser ) map.get( key ) ).getProperty("userStatus").toString() );
@@ -77,6 +79,8 @@ public class Incidentes extends SugarRecord implements Serializable {
             ur.setEmail( getUsuarioReceptor().getEmail() );
             for ( Object key : map.keySet() ) {
                 if( key.equals("usuarioReceptor" ) ) {
+                    ur.setObjectId( ( (BackendlessUser) map.get( key ) ).getProperty("objectId").toString() );
+                    ur.setEmail( ( (BackendlessUser) map.get( key ) ).getProperty("email").toString() );
                     ur.setName( ( ( BackendlessUser ) map.get( key ) ).getProperty("name").toString() );
                     ur.setSocialAccount( ( ( BackendlessUser ) map.get( key ) ).getProperty("socialAccount").toString() );
                     ur.setUserStatus( ( ( BackendlessUser ) map.get( key ) ).getProperty("userStatus").toString() );
@@ -96,6 +100,16 @@ public class Incidentes extends SugarRecord implements Serializable {
     private String descripcion = "";
     private String estado = "";
     private String foto = "";
+    private String audio = "";
+
+    public String getAudio() {
+        return audio;
+    }
+
+    public void setAudio(String audio) {
+        this.audio = audio;
+    }
+
     private String pabellon = "";
     private String fecha = "";
     private UsuarioBackendless usuarioEmisor;

@@ -18,6 +18,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.backendless.persistence.local.UserIdStorageFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.orm.query.Select;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.adapters.SectionsPagerAdapter;
 import pe.edu.utp.unihelppro.Connect;
 import pe.edu.utp.unihelppro.models.Incidentes;
+import pe.edu.utp.unihelppro.models.Reportados;
 
 public class IncidentesFragment extends Fragment {
     
@@ -110,7 +112,6 @@ public class IncidentesFragment extends Fragment {
             incidentesStorage.find( queryBuilder, new AsyncCallback<List<Map>>() {
                 @Override
                 public void handleResponse( List<Map> maps ) {
-                    //List<Incidentes> incidentesList = new ArrayList<>();
                     List<Incidentes> incidentesPublicasList = new ArrayList<>();
                     List<Incidentes> incidentesPropiasList = new ArrayList<>();
                     mSectionsPagerAdapter = new SectionsPagerAdapter( getChildFragmentManager());
@@ -124,9 +125,12 @@ public class IncidentesFragment extends Fragment {
 
                     String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
                     for ( Map map: maps) {
+                        Gson gson = new Gson();
+                        String json = gson.toJson( map );
+                        final Incidentes incidente = gson.fromJson(json, Incidentes.class);
                         ObjectMapper mapper = new ObjectMapper();
                         try {
-                            Incidentes incidente = mapper.convertValue(map, Incidentes.class);
+                            //Incidentes incidente = mapper.convertValue(map, Incidentes.class);
                             incidente.setupUsers( map );
                             incidente.save();
                             //incidentesList.add( incidente );

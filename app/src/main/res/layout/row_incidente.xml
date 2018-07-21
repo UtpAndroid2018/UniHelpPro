@@ -87,6 +87,8 @@
                 android:src="@drawable/ic_photo_camera_black" />
 
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/linear_reproducir"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -98,7 +100,6 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     app:srcCompat="@drawable/ic_play" />
-
                 <TextView
                     android:id="@+id/asd"
                     android:layout_width="wrap_content"
@@ -108,9 +109,6 @@
                     android:textColor="#AFA7A7"
                     android:layout_gravity="center_vertical"
                     android:textSize="14sp"/>
-
-
-
             </LinearLayout>
 
         </LinearLayout>
