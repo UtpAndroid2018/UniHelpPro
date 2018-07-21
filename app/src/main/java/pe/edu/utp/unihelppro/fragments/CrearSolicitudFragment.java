@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -175,7 +176,6 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
                     public void handleResponse( final BackendlessFile backendlessFile ) {
                         registrarIncidente( photoFile, backendlessFile );
                     }
-
                     @Override
                     public void handleFault( BackendlessFault backendlessFault ) {
                         Toast.makeText( Connect.getInstance(), backendlessFault.toString(), Toast.LENGTH_SHORT ).show();
@@ -208,7 +208,7 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
         );
     }
     private void uploadAllMedia() {
-        if( !currentPathImage.equals("") && currentBMImage != null ) {
+        if( !currentPathImage.equals("") || currentBMImage != null ) {
             uploadPhoto();
         } else {
             if( !currentPathAudio.equals("") ) {
@@ -232,13 +232,44 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
     }
 
     private void takePhotoFromCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+            File photoFile = null;
+            photoFile = createImageFile( );
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(mContext,
+                        "pe.edu.utp.unihelppro.fileprovider",
+                        photoFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(intent, CAMERA);
+            }
+        }
+    }
+
+    private File createImageFile() {
+        File wallpaperDirectory = new File( Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+        }
+        try {
+            File f = new File(wallpaperDirectory, Calendar.getInstance()
+                    .getTimeInMillis() + ".jpg");
+            f.createNewFile();
+            currentPathImage = f.getAbsolutePath();
+            MediaScannerConnection.scanFile(Connect.getInstance(),
+                    new String[]{f.getPath()},
+                    new String[]{"image/jpeg"}, null);
+            Log.e("TAG", "File Saved::--->" + f.getAbsolutePath());
+            return f;
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return null;
     }
 
     private void choosePhotoFromGallary() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         startActivityForResult(galleryIntent, GALLERY);
     }
@@ -266,16 +297,12 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
             }
 
         } else if (requestCode == CAMERA) {
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            currentPathImage = saveImage(thumbnail);
             previewImageView.setVisibility(View.VISIBLE);
             Picasso.with(mContext).load( new File( currentPathImage ) ).into(previewImageView);
         }
     }
 
     public String saveImage(Bitmap myBitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         File wallpaperDirectory = new File( Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
         if (!wallpaperDirectory.exists()) {
             wallpaperDirectory.mkdirs();
@@ -285,13 +312,14 @@ public class CrearSolicitudFragment extends Fragment implements RecordFragment.O
                     .getTimeInMillis() + ".jpg");
             f.createNewFile();
             FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fo);
+            fo.flush();
+            //fo.write(bytes.toByteArray());
             MediaScannerConnection.scanFile(Connect.getInstance(),
                     new String[]{f.getPath()},
                     new String[]{"image/jpeg"}, null);
             fo.close();
             Log.e("TAG", "File Saved::--->" + f.getAbsolutePath());
-
             currentBMImage = myBitmap;
             return f.getAbsolutePath();
         } catch (IOException e1) {
