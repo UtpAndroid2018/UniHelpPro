@@ -62,7 +62,7 @@
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"
-            android:id="@+id/accion_fragmente"
+            android:id="@+id/accion_eviar"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

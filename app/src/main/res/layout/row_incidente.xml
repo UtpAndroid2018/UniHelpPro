@@ -104,9 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:text="@string/me_gustas"
-
                     android:textColor="@color/colorSecondaryText" />
-
                 <TextView
                     android:id="@+id/incidenteComentarios"
                     android:layout_width="wrap_content"
@@ -121,7 +119,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
                 <Button
                     android:id="@+id/btnMeGusta"
                     style="?android:attr/buttonBarStyle"
@@ -129,13 +126,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:clickable="true"
                     android:drawableStart="@drawable/ic_favorite_black"
-                    android:focusable="true"
                     android:text="@string/me_gustas"
                     android:textStyle="bold"
                     android:textColor="@color/colorSecondaryText" />
-
                 <Button
                     android:id="@+id/btnComentar"
                     style="?android:attr/buttonBarStyle"

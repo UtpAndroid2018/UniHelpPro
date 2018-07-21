@@ -93,6 +93,8 @@
     <string name="ingresar_texto">Debes ingresar una descripción</string>
     <string name="error_seleccionar_calificacion">Debes seleccionar una calificación</string>
     <string name="reportando_incidente">Reportando incidente</string>
+    <string name="calificando_incidente">Calificando incidente</string>
+    <string name="registrando_incidente">Registrando incidente</string>
 
 
     <string-array name="categoriaList">

@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 return true;
             case R.id.action_calificar:
-                CalificarIncidente calificarIncidente = CalificarIncidente.newInstance("", "");
+                CalificarIncidente calificarIncidente = CalificarIncidente.newInstance();
                 calificarIncidente.show( getSupportFragmentManager() , "dialog" );
                 return true;
             case R.id.action_reportar:
