@@ -149,7 +149,6 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 if ( currentUser != null ) {
                     Map userMap = currentUser.getProperties();
                     setRelations( currentUser, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, false );
-
                 } else {
                     Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser>() {
                         @Override
@@ -164,7 +163,6 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                         }
                     });
                 }
-
             }
 
             public void handleFault( BackendlessFault fault ) {
