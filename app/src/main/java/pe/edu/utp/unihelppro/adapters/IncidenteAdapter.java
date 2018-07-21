@@ -64,7 +64,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
     public IncidenteAdapter(List<Incidentes> incidentesList, Context mContext) {
         this.incidentes = incidentesList;
         this.mContext = mContext;
-        this.fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
+        fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
     }
     public void updateData(List<Incidentes> _incidentes) {
         incidentes.clear();
@@ -116,14 +116,12 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                     solicitud.put( "objectId", inc.getObjectId() );
                     setRelations( currentUser, solicitud,"UsuariosReportados" , "incidente:UsuariosReportados:1", mapSavedReporte, savedReporte, true );
                 }
-                //dismiss();
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 dismmisProgreesLoading();
                 Toast.makeText(mContext, "Ocurrió un error al reportar el inicidente", Toast.LENGTH_SHORT).show();
-                //enviar_comentario.setEnabled(true);
             }
         });
     }
@@ -231,7 +229,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 asignarIncidente.show( fragmentManager , "dialog" );
                 return true;
             case R.id.action_calificar:
-                CalificarIncidente calificarIncidente = CalificarIncidente.newInstance("", "");
+                CalificarIncidente calificarIncidente = CalificarIncidente.newInstance();
                 calificarIncidente.show( fragmentManager , "dialog" );
                 return true;
             case R.id.action_reportar:
