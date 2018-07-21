@@ -107,8 +107,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_insert_photo_black_24dp"
-                    android:text="@string/adjuntar_foto" />
+                    android:text="@string/adjuntar_foto"
+                    android:textColor="#fff"
+                    android:backgroundTint="@color/colorPrimary"
+
                     />
+
                 <ImageView
                     android:id="@+id/previewImageView"
                     android:layout_width="match_parent"
@@ -131,7 +135,11 @@
                     android:layout_height="wrap_content"
 
                     android:drawableStart="@drawable/ic_mic_black_24dp"
-                    android:text="@string/adjuntar_audio" />
+                    android:text="@string/adjuntar_audio"
+                    android:textColor="#fff"
+                    android:backgroundTint="@color/colorPrimary"
+                    />
+
             </LinearLayout>
 
             <LinearLayout
@@ -186,7 +194,7 @@
                     android:id="@+id/inputNombre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     />
+                    />
             </LinearLayout>
 
             <LinearLayout
