@@ -38,18 +38,15 @@
                     android:textColor="@color/colorSecondaryText"
                     />
             </LinearLayout>
-
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/incidenteEditar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_edit_black" />
             <ImageView
                 android:id="@+id/incidenteBoton"
-                android:text="Click"
-                android:clickable="true"
-                android:onClick="showPopup"
-                app:srcCompat="@drawable/ic_more_horiz_black_24dp"
+                app:srcCompat="@drawable/ic_more_vert_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

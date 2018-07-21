@@ -89,6 +89,7 @@
     <string name="reportes">Reportes</string>
     <string name="comentario">Comentario</string>
     <string name="escribe_comentario">Escribe un comentario</string>
+    <string name="action_editar">Editar Incidente</string>
 
 
     <string-array name="categoriaList">

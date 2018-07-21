@@ -6,10 +6,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,14 +36,17 @@ import java.util.Objects;
 import pe.edu.utp.unihelppro.Connect;
 import pe.edu.utp.unihelppro.R;
 import pe.edu.utp.unihelppro.activities.MainActivity;
+import pe.edu.utp.unihelppro.fragments.AsignarIncidente;
+import pe.edu.utp.unihelppro.fragments.CalificarIncidente;
 import pe.edu.utp.unihelppro.fragments.ComentariosDialogFragment;
 import pe.edu.utp.unihelppro.fragments.IncidenteFragment;
+import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
 import pe.edu.utp.unihelppro.models.Comentarios;
 import pe.edu.utp.unihelppro.models.Incidentes;
 
 import static pe.edu.utp.unihelppro.Connect.getContext;
 
-public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.ViewHolder> {
+public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener {
     private List<Incidentes> incidentes;
     private final Context mContext;
     private int _position = -1;
@@ -81,6 +86,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         private TextView incidenteContenido;
         private ImageView incidenteImagen;
         private ImageView incidenteEditar;
+        private ImageView incidenteBoton;
         private RecyclerView recycler_comentarios_incidente;
 
         private Button btnMeGusta;
@@ -94,13 +100,53 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
             incidenteImagen = (ImageView) itemView.findViewById(R.id.incidenteImagen);
 
             incidenteEditar = (ImageView) itemView.findViewById(R.id.incidenteEditar);
+            incidenteBoton = (ImageView) itemView.findViewById(R.id.incidenteBoton);
 
             btnMeGusta = (Button) itemView.findViewById(R.id.btnMeGusta);
             btnComentar = (Button) itemView.findViewById(R.id.btnComentar);
 
             //dividerProject= (ImageView) itemView.findViewById(R.id.dividerProject);
+
+            incidenteBoton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopup( view );
+                }
+            });
         }
     }
+
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_editar:
+                return true;
+            case R.id.action_asignar:
+                AsignarIncidente asignarIncidente = AsignarIncidente.newInstance("", "");
+                asignarIncidente.show( fragmentManager , "dialog" );
+                return true;
+            case R.id.action_calificar:
+                CalificarIncidente calificarIncidente = CalificarIncidente.newInstance("", "");
+                calificarIncidente.show( fragmentManager , "dialog" );
+                return true;
+            case R.id.action_reportar:
+                ReportarIncidente reportarIncidente = ReportarIncidente.newInstance("", "");
+                reportarIncidente.show( fragmentManager , "dialog" );
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public void showPopup(View v){
+        PopupMenu popup = new PopupMenu(mContext, v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.main);
+        popup.show();
+    }
+
 
     private void openComentarios ( String incidenteID ) {
         ComentariosDialogFragment comentariosDialogFragment = ComentariosDialogFragment.newInstance( incidenteID );

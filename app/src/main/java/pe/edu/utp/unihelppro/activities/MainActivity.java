@@ -41,7 +41,7 @@ import pe.edu.utp.unihelppro.models.UsuarioBackendless;
 import pe.edu.utp.unihelppro.utils.Navigation;
 import pe.edu.utp.unihelppro.utils.UserUtils;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private Context mContext;
     public NavigationView nvDrawer;
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -279,32 +279,5 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    public void showPopup(View v){
-        PopupMenu popup = new PopupMenu(this, v);
-        popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.main);
-        popup.show();
-
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.action_asignar:
-                Toast.makeText(this,"Item 1 clicked", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_calificar:
-                Toast.makeText(this,"Item 2 clicked", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_reportar:
-                Toast.makeText(this,"Item 3 clicked", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return false;
-        }
     }
 }
