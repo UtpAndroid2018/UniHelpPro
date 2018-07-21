@@ -15,6 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
+            android:textColor="#5D7F76"
+            android:textSize="40dp"
+            android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem" />
         <LinearLayout
             android:orientation="vertical"
@@ -25,6 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
+                android:textStyle="bold"
+                android:textColor="#3E504B"
                 android:textAppearance="?attr/textAppearanceListItem" />
             <TextView
                 android:id="@+id/content"
@@ -33,6 +38,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:textColor="#818785"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </LinearLayout>
     </LinearLayout>
