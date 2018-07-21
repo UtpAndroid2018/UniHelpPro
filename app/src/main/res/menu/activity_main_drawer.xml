@@ -5,25 +5,31 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:icon="@drawable/"
+            android:icon="@drawable/ic_listado_incidencias"
             android:id="@+id/nav_incidentes"
             android:title="@string/incidentes" />
         <item
+            android:icon="@drawable/ic_anadir_incidencia"
             android:id="@+id/nav_anadir_incidente"
             android:title="@string/anadir_incidente" />
         <item
+            android:icon="@drawable/ic_question_answer_black_24dp"
             android:id="@+id/nav_preguntas_frecuentes"
             android:title="@string/preguntas_frecuentes" />
         <item
+            android:icon="@drawable/ic_user_reportado"
             android:id="@+id/nav_usuarios_reportado"
             android:title="@string/usuarios_reportado" />
         <item
+            android:icon="@drawable/ic_user_reportado"
             android:id="@+id/nav_personal_reportado"
             android:title="@string/personal_reportado" />
         <item
+            android:icon="@drawable/ic_estadisticas"
             android:id="@+id/nav_estadisticas"
             android:title="@string/estadisticas" />
         <item
+            android:icon="@drawable/ic_cerrar_sesion"
             android:id="@+id/nav_cerrar_sesion"
             android:title="@string/cerrar_sesion" />
     </group>
