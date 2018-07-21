@@ -14,6 +14,23 @@ import java.util.Map;
 public class Incidentes extends SugarRecord implements Serializable {
     @Unique
     private String objectId = "";
+    private int comentarios = 0;
+    private int megustas = 0;
+    public int getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(int comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public int getMegustas() {
+        return megustas;
+    }
+
+    public void setMegustas(int megustas) {
+        this.megustas = megustas;
+    }
 
     public Incidentes() {
     }

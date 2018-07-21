@@ -48,6 +48,7 @@ import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
 import pe.edu.utp.unihelppro.models.Calificaciones;
 import pe.edu.utp.unihelppro.models.Comentarios;
 import pe.edu.utp.unihelppro.models.Incidentes;
+import pe.edu.utp.unihelppro.models.Likes;
 import pe.edu.utp.unihelppro.models.Reportados;
 import pe.edu.utp.unihelppro.models.UsuarioBackendless;
 import pe.edu.utp.unihelppro.models.UsuarioProperties;
@@ -55,6 +56,7 @@ import pe.edu.utp.unihelppro.models.UsuarioProperties;
 import static pe.edu.utp.unihelppro.Connect.getContext;
 
 public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.ViewHolder> implements CalificarIncidente.OnCalificarListener, PopupMenu.OnMenuItemClickListener, ReportarIncidente.OnReportarListener {
+    private View mView;
     private List<Incidentes> incidentes;
     private final Context mContext;
     private int _position = -1;
@@ -95,7 +97,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         return usuarioProperties;
     }
 
-    private void setRelations(final BackendlessUser currentUser, final Map mapData, final String tablaName, String relation, final Map mapSaved, final Reportados savedReporte, final Calificaciones savedCalifica, final boolean _final, final int idView ) {
+    private void setRelations(final BackendlessUser currentUser, final Map mapData, final String tablaName, String relation, final Map mapSaved, final Reportados savedReporte, final Calificaciones savedCalifica, final Likes savedLike, final boolean _final, final int idView ) {
         IDataStore<Map> contactStorage = Backendless.Data.of( tablaName );
         List<Map> addresses = new ArrayList<Map>();
         addresses.add( mapData );
@@ -107,6 +109,13 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                     Incidentes incidente = new Incidentes( inc.getObjectId() );
                     incidente.getData();
                     switch ( idView ){
+                        case R.id.btnMeGusta:
+                            savedLike.setIncidente( incidente );
+                            savedLike.setUsuario( setupUserMap( currentUser ) );
+                            savedLike.save();
+                            dismmisProgreesLoading();
+                            Toast.makeText(mContext, "Te gusta el incidente", Toast.LENGTH_SHORT).show();
+                            break;
                         case R.id.action_calificar:
                             savedCalifica.setIncidente( incidente );
                             savedCalifica.setUsuarioEmisor( setupUserMap( currentUser ) );
@@ -125,7 +134,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 } else {
                     Map<String, String> solicitud = new HashMap<>();
                     solicitud.put( "objectId", inc.getObjectId() );
-                    setRelations( currentUser, solicitud,tablaName , "incidente:"+ tablaName +":1", mapSaved, savedReporte,savedCalifica, true, idView );
+                    setRelations( currentUser, solicitud,tablaName , "incidente:"+ tablaName +":1", mapSaved, savedReporte, savedCalifica, savedLike,true, idView );
                 }
             }
 
@@ -156,13 +165,13 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 reportado.save();
                 if ( currentUser != null ) {
                     Map userMap = currentUser.getProperties();
-                    setRelations( currentUser, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, null, false, R.id.action_reportar );
+                    setRelations( currentUser, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, null, null, false, R.id.action_reportar );
                 } else {
                     Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser>() {
                         @Override
                         public void handleResponse(final BackendlessUser response) {
                             Map userMap = response.getProperties();
-                            setRelations( response, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, null, false, R.id.action_reportar );
+                            setRelations( response, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, null, null, false, R.id.action_reportar );
                         }
 
                         @Override
@@ -209,13 +218,13 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 calificado.save();
                 if ( currentUser != null ) {
                     Map userMap = currentUser.getProperties();
-                    setRelations( currentUser, userMap,"Calificaciones" , "usuarioEmisor:Calificaciones:1", savedCalifica, null, calificado, false, R.id.action_calificar );
+                    setRelations( currentUser, userMap,"Calificaciones" , "usuarioEmisor:Calificaciones:1", savedCalifica, null, calificado, null, false, R.id.action_calificar );
                 } else {
                     Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser>() {
                         @Override
                         public void handleResponse(final BackendlessUser response) {
                             Map userMap = response.getProperties();
-                            setRelations( response, userMap,"Calificaciones" , "usuarioEmisor:Calificaciones:1", savedCalifica, null, calificado, false, R.id.action_calificar );
+                            setRelations( response, userMap,"Calificaciones" , "usuarioEmisor:Calificaciones:1", savedCalifica, null, calificado, null, false, R.id.action_calificar );
                         }
                         @Override
                         public void handleFault(BackendlessFault fault) {
@@ -234,20 +243,22 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private View mView;
         private TextView incidenteNombreUsuario;
+        private TextView incidenteMeGustas;
+        private TextView incidenteComentarios;
         private TextView incidenteFecha;
         private TextView incidenteContenido;
         private ImageView incidenteImagen;
         private ImageView incidenteEditar;
         private ImageView incidenteBoton;
-        private RecyclerView recycler_comentarios_incidente;
 
         private Button btnMeGusta;
         private Button btnComentar;
         ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
+            incidenteComentarios = (TextView) itemView.findViewById(R.id.incidenteComentarios);
+            incidenteMeGustas = (TextView) itemView.findViewById(R.id.incidenteMeGustas);
             incidenteNombreUsuario = (TextView) itemView.findViewById(R.id.incidenteNombreUsuario);
             incidenteFecha = (TextView) itemView.findViewById(R.id.incidenteFecha);
             incidenteContenido = (TextView) itemView.findViewById(R.id.incidenteContenido);
@@ -258,9 +269,6 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
 
             btnMeGusta = (Button) itemView.findViewById(R.id.btnMeGusta);
             btnComentar = (Button) itemView.findViewById(R.id.btnComentar);
-
-            //dividerProject= (ImageView) itemView.findViewById(R.id.dividerProject);
-
             incidenteBoton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -303,6 +311,71 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         popup.show();
     }
 
+    private void registrarLike(){
+        HashMap solicitud = new HashMap();
+        Backendless.Persistence.of( "Likes" ).save( solicitud, new AsyncCallback<Map>() {
+            public void handleResponse(final Map savedLikes ) {
+                final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+                Gson gson = new Gson();
+                String json = gson.toJson( savedLikes );
+                final Likes like = gson.fromJson(json, Likes.class);
+                like.save();
+                Map userMap = currentUser.getProperties();
+                setRelations( currentUser, userMap,"Likes" , "usuario:Likes:1", savedLikes, null, null, like, false, R.id.btnMeGusta );
+            }
+
+            public void handleFault( BackendlessFault fault ) {
+                dismmisProgreesLoading();
+                Toast.makeText(mContext, "Ocurrió un error al registrar el me gusta", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void ActualizarIncidenteLike(){
+        HashMap solicitud = new HashMap();
+        solicitud.put( "megustas", inc.getMegustas() );
+        solicitud.put( "objectId", inc.getObjectId() );
+
+        Backendless.Persistence.of( "Incidentes" ).save( solicitud, new AsyncCallback<Map>() {
+            public void handleResponse(final Map savedIncidente ) {
+                final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+                Gson gson = new Gson();
+                String json = gson.toJson( savedIncidente );
+                final Incidentes incidente = gson.fromJson(json, Incidentes.class);
+                incidente.save();
+                registrarLike();
+            }
+
+            public void handleFault( BackendlessFault fault ) {
+                dismmisProgreesLoading();
+                Toast.makeText(mContext, "Ocurrió un error al registrar el me gusta", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void openMegusta (final String incidenteID ) {
+        loadProgreesUploadLoading();
+        progressDialog.setMessage( mContext.getResources().getString(R.string.agergando_megusta ) );
+
+        Backendless.Data.of( "Incidentes" ).findById( incidenteID, new AsyncCallback<Map>() {
+            @Override
+            public void handleResponse(final Map response) {
+                Gson gson = new Gson();
+                String json = gson.toJson( response );
+                Incidentes incidente = gson.fromJson(json, Incidentes.class);
+                int megustas = incidente.getMegustas();
+                megustas++;
+                inc.setMegustas( megustas );
+                TextView incidenteMeGustas = (TextView) mView.findViewById(R.id.incidenteMeGustas);
+                incidenteMeGustas.setText(  megustas + " me gustas" );
+                ActualizarIncidenteLike();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(mContext, "Ocurrió un error al registrar el me gusta", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void openComentarios ( String incidenteID ) {
         ComentariosDialogFragment comentariosDialogFragment = ComentariosDialogFragment.newInstance( incidenteID );
@@ -316,10 +389,13 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         if( inc.getUsuarioEmisor() != null ) {
             holder.incidenteNombreUsuario.setText(inc.getUsuarioEmisor().getName());
         }
-        Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
-        TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
-        String fecha = TimeAgo.using(Long.parseLong(inc.getFecha()), messages);
-        holder.incidenteFecha.setText(fecha);
+        if( inc.getFecha() != null && !inc.getFecha().equals("") ){
+            Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
+            TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
+            long longDate = Long.parseLong(inc.getFecha() );
+            String fecha = TimeAgo.using(Long.parseLong(inc.getFecha()), messages);
+            holder.incidenteFecha.setText(fecha);
+        }
         if( !inc.getDescripcion().equals("") ) {
             holder.incidenteContenido.setText(inc.getDescripcion());
         } else {
@@ -330,6 +406,8 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         } else {
             holder.incidenteImagen.setVisibility(View.GONE);
         }
+        holder.incidenteMeGustas.setText(  inc.getMegustas() + " me gustas" );
+        holder.incidenteComentarios.setText(  inc.getComentarios() + " comentarios" );
         String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
         if( !inc.getUsuarioEmisor().getObjectId().equals( currentUserObjectId )  ) {
             holder.incidenteEditar.setVisibility(View.GONE);
@@ -338,6 +416,12 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
             @Override
             public void onClick(View v) {
                 openComentarios( inc.getObjectId() );
+            }
+        });
+        holder.btnMeGusta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMegusta( inc.getObjectId() );
             }
         });
     }

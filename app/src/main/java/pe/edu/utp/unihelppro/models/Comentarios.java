@@ -16,6 +16,13 @@ import java.util.Map;
 public class Comentarios extends SugarRecord implements Serializable {
     @Unique
     private String objectId;
+    private String descripcion = "";
+    private Comentarios comentario = null;
+    private Incidentes incidente = null;
+    private String estado = "";
+    private String fecha = "";
+    private UsuarioProperties usuario;
+
 
     public String getObjectId() {
         return objectId;
@@ -24,13 +31,6 @@ public class Comentarios extends SugarRecord implements Serializable {
     public void setObjectId(String objectId) {
         this.objectId = objectId;
     }
-
-    private String descripcion = "";
-    private Comentarios comentario = null;
-    private Incidentes incidente = null;
-    private String estado = "";
-    private String fecha = "";
-    private UsuarioProperties usuario;
 
     public String getDescripcion() {
         return descripcion;
