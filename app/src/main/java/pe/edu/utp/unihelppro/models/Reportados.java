@@ -10,22 +10,20 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Reportados extends SugarRecord implements Serializable {
-
     @Unique
     private String objectId;
-
     private String descripcion = "";
     private String fecha = "";
-    private int calificacion = 0;
+    private float calificacion = 0;
     private Incidentes incidente = null;
     private UsuarioProperties usuarioEmisor;
     private UsuarioProperties usuarioReceptor;
 
-    public int getCalificacion() {
+    public float getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(int calificacion) {
+    public void setCalificacion(float calificacion) {
         this.calificacion = calificacion;
     }
 

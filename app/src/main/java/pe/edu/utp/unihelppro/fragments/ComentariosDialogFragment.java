@@ -198,7 +198,6 @@ public class ComentariosDialogFragment extends DialogFragment {
                     registerToChanel();
                 } else {
                     setRelations( currentUser, currentIncicenteMap,"Comentarios" , "incidente:Comentarios:1", savedComentario, true );
-
                 }
                 //dismiss();
             }

@@ -1,5 +1,6 @@
 package pe.edu.utp.unihelppro.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
 import com.backendless.IDataStore;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -28,6 +30,8 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -43,14 +47,19 @@ import pe.edu.utp.unihelppro.fragments.IncidenteFragment;
 import pe.edu.utp.unihelppro.fragments.ReportarIncidente;
 import pe.edu.utp.unihelppro.models.Comentarios;
 import pe.edu.utp.unihelppro.models.Incidentes;
+import pe.edu.utp.unihelppro.models.Reportados;
+import pe.edu.utp.unihelppro.models.UsuarioBackendless;
+import pe.edu.utp.unihelppro.models.UsuarioProperties;
 
 import static pe.edu.utp.unihelppro.Connect.getContext;
 
-public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener {
+public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener, ReportarIncidente.OnReportarListener {
     private List<Incidentes> incidentes;
     private final Context mContext;
     private int _position = -1;
     private static FragmentManager fragmentManager;
+    private ProgressDialog progressDialog;
+    private Incidentes inc;
 
     public IncidenteAdapter(List<Incidentes> incidentesList, Context mContext) {
         this.incidentes = incidentesList;
@@ -72,12 +81,108 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
         return new IncidenteAdapter.ViewHolder(view);
     }
 
-
     @Override
     public int getItemCount() {
         return this.incidentes.size();
     }
 
+    private UsuarioProperties setupUserMap(BackendlessUser currentUser ) {
+        UsuarioBackendless ub = new UsuarioBackendless( currentUser.getObjectId()  );
+        ub.setupUser( currentUser );
+        UsuarioProperties usuarioProperties = new UsuarioProperties();
+        usuarioProperties.setProperties( ub );
+        return usuarioProperties;
+    }
+
+    private void setRelations(final BackendlessUser currentUser, final Map mapData, String tablaName, String relation, final Map mapSavedReporte, final Reportados savedReporte, final boolean _final ) {
+        IDataStore<Map> contactStorage = Backendless.Data.of( tablaName );
+        List<Map> addresses = new ArrayList<Map>();
+        addresses.add( mapData );
+        contactStorage.setRelation(mapSavedReporte, relation, addresses, new AsyncCallback<Integer>() {
+            @Override
+            public void handleResponse(Integer response) {
+                Gson gson = new Gson();
+                if( _final ) {
+                    Incidentes incidente = new Incidentes( inc.getObjectId() );
+                    incidente.getData();
+                    savedReporte.setIncidente( incidente );
+                    savedReporte.setUsuarioEmisor( setupUserMap( currentUser ) );
+                    savedReporte.save();
+                    //comentariosList.add( 0, comentario );
+                    dismmisProgreesLoading();
+                    Toast.makeText(mContext, "Incidente reportado", Toast.LENGTH_SHORT).show();
+                } else {
+                    Map<String, String> solicitud = new HashMap<>();
+                    solicitud.put( "objectId", inc.getObjectId() );
+                    setRelations( currentUser, solicitud,"UsuariosReportados" , "incidente:UsuariosReportados:1", mapSavedReporte, savedReporte, true );
+                }
+                //dismiss();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                dismmisProgreesLoading();
+                Toast.makeText(mContext, "Ocurrió un error al reportar el inicidente", Toast.LENGTH_SHORT).show();
+                //enviar_comentario.setEnabled(true);
+            }
+        });
+    }
+
+    @Override
+    public void onReportar(Reportados reporte) {
+        loadProgreesUploadLoading();
+        HashMap solicitud = new HashMap();
+        solicitud.put( "calificacion", reporte.getCalificacion() );
+        solicitud.put( "descripcion", reporte.getDescripcion() );
+        solicitud.put( "fecha", new Date());
+        //reporte.save();
+        final String currentUserObjectId = UserIdStorageFactory.instance().getStorage().get();
+
+        Backendless.Persistence.of( "UsuariosReportados" ).save( solicitud, new AsyncCallback<Map>() {
+            public void handleResponse(final Map savedReporte ) {
+                ObjectMapper mapper = new ObjectMapper();
+                final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+                Gson gson = new Gson();
+                String json = gson.toJson( savedReporte );
+                final Reportados reportado = gson.fromJson(json, Reportados.class);
+                reportado.save();
+                if ( currentUser != null ) {
+                    Map userMap = currentUser.getProperties();
+                    setRelations( currentUser, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, false );
+
+                } else {
+                    Backendless.Data.of( BackendlessUser.class ).findById( currentUserObjectId, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(final BackendlessUser response) {
+                            Map userMap = response.getProperties();
+                            setRelations( response, userMap,"UsuariosReportados" , "usuarioEmisor:UsuariosReportados:1", savedReporte, reportado, false );
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(mContext, "Ocurrió un error al publicar el comentario", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            }
+
+            public void handleFault( BackendlessFault fault ) {
+                dismmisProgreesLoading();
+                Toast.makeText(mContext, "Ocurrió un error al reportar el inicidente", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void dismmisProgreesLoading() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
+    private void loadProgreesUploadLoading() {
+        progressDialog = ProgressDialog.show(mContext, null, mContext.getResources().getString(R.string.reportando_incidente), true);
+        progressDialog.setCancelable(false);
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private View mView;
@@ -132,7 +237,8 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
                 calificarIncidente.show( fragmentManager , "dialog" );
                 return true;
             case R.id.action_reportar:
-                ReportarIncidente reportarIncidente = ReportarIncidente.newInstance("", "");
+                ReportarIncidente reportarIncidente = ReportarIncidente.newInstance();
+                reportarIncidente.setmListener( this );
                 reportarIncidente.show( fragmentManager , "dialog" );
                 return true;
             default:
@@ -156,7 +262,7 @@ public class IncidenteAdapter extends RecyclerView.Adapter<IncidenteAdapter.View
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int pt) {
         final int position = holder.getAdapterPosition();
-        final Incidentes inc = incidentes.get(position);
+        inc = incidentes.get(position);
         if( inc.getUsuarioEmisor() != null ) {
             holder.incidenteNombreUsuario.setText(inc.getUsuarioEmisor().getName());
         }

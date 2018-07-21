@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                 calificarIncidente.show( getSupportFragmentManager() , "dialog" );
                 return true;
             case R.id.action_reportar:
-                ReportarIncidente reportarIncidente = ReportarIncidente.newInstance("", "");
+                ReportarIncidente reportarIncidente = ReportarIncidente.newInstance();
                 reportarIncidente.show( getSupportFragmentManager() , "dialog" );
                 return true;
             case R.id.action_asignar:

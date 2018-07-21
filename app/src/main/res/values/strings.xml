@@ -90,6 +90,9 @@
     <string name="comentario">Comentario</string>
     <string name="escribe_comentario">Escribe un comentario</string>
     <string name="action_editar">Editar Incidente</string>
+    <string name="ingresar_texto">Debes ingresar una descripción</string>
+    <string name="error_seleccionar_calificacion">Debes seleccionar una calificación</string>
+    <string name="reportando_incidente">Reportando incidente</string>
 
 
     <string-array name="categoriaList">
